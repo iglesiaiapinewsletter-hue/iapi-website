@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Anuncios | IAPI Irving</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <style>@media print {.site-header,.mobile-bar,.no-print{display:none!important} body{background:#fff;color:#000;padding:0} .card{box-shadow:none;border:1px solid #ddd}}</style>
+  <link rel="icon" type="image/png" href="/assets/images/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
+  <link rel="shortcut icon" href="/assets/images/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+</head>
+<body>
+  <a class="skip-link" href="#main">Saltar al contenido</a>
+  <header class="site-header"><div class="container header-inner"><a class="brand" href="/"><img src="/assets/images/logo.png" alt="Logo de IAPI"><span>IAPI Irving</span></a><nav aria-label="Principal"><ul class="nav-links"><li><a href="/anuncios/" aria-current="page">Anuncios</a></li><li><a href="/eventos/">Eventos</a></li></ul></nav></div></header>
+  <main id="main" style="padding-top:var(--header-h);">
+    <section class="section page-intro"><div class="container"><div style="display:flex;justify-content:space-between;gap:1rem;align-items:end;flex-wrap:wrap;"><div><p class="eyebrow">Boletín</p><h1>Anuncios</h1><p class="lead">Noticias y anuncios de la iglesia.</p></div><button class="btn btn-secondary no-print" onclick="window.print()">Imprimir</button></div><div id="annList" class="grid" style="margin-top:1.5rem;"></div></div></section>
+  </main>
+  <footer class="site-footer"><div class="container">
+    <p><strong>Iglesia Apóstoles y Profetas Irving (IAPI)</strong></p>
+    <p>530 N O'Connor Rd, Irving, TX 75061 · <a href="tel:+19039980338">(903) 998-0338</a></p>
+    <p style="margin-top:.75rem;font-size:.95rem;"><a href="/privacidad/">Privacidad</a> · <a href="/terminos/">Términos</a> · <a href="/cookies/">Cookies</a> · <a href="/accesibilidad/">Accesibilidad</a> · <a href="#cookie-settings">Configuración de cookies</a></p>
+    <p style="font-size:.95rem;">© 2026 Iglesia Apostoles y Profetas USA en Irving.</p>
+  </div></footer>
+  <script>
+    (async function(){
+      const el=document.getElementById('annList');
+      try{const r=await fetch('/content/announcements.json');const d=await r.json();const items=d.announcements||[];
+        if(!items.length){el.innerHTML='<div class="card"><h2>Próximamente</h2><p>No hay anuncios publicados por ahora.</p></div>';return;}
+        el.innerHTML=items.map(a=>`<article class="card"><h2>${a.title_es||a.title||''}</h2><p><strong>${a.date||''}</strong></p><p>${a.body_es||a.body||''}</p></article>`).join('');
+      }catch(e){el.innerHTML='<div class="card"><p>No pudimos cargar los anuncios.</p></div>';}
+    })();
+  </script>
+  <script src="/assets/js/main.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+{
+  "church": {
+    "legalName": "Iglesia Apostoles y Profetas USA en Irving",
+    "publicName": "Iglesia Apóstoles y Profetas Irving",
+    "shortName": "IAPI",
+    "tagline": "¡Proclamando el señorío de Cristo y reuniéndonos en adoración, oración y la Palabra!",
+    "address": "530 N O'Connor Rd, Irving, TX 75061",
+    "phone": "(903) 998-0338",
+    "phoneTel": "+19039980338",
+    "contactEmail": "apostolesyprofetasirving@gmail.com",
+    "formsEmail": "apostolesyprofetasirving@gmail.com",
+    "pastor": "Oscar Amílcar Guevara",
+    "timezone": "America/Chicago"
+  },
+  "socials": {
+    "youtube": "https://www.youtube.com/aypirving",
+    "facebook": "https://www.facebook.com/apostolesyprofetasirving",
+    "instagram": "https://www.instagram.com/iglesiaiapi",
+    "tiktok": "https://www.tiktok.com/@iglesiaiapi"
+  },
+  "youtube": {
+    "channelId": "UCidzfKBmsuv01CCQIQkCofw"
+  },
+  "giving": {
+    "method": "Zelle",
+    "recipient": "(903) 998-0338",
+    "displayName": "Iglesia Apostoles y Profetas USA en Irving"
+  },
+  "services": [
+    { "day": "Sunday", "time": "11:00 AM", "name_es": "Culto de Enseñanza", "name_en": "Teaching Service" },
+    { "day": "Wednesday", "time": "7:30 PM", "name_es": "Culto de Oración", "name_en": "Prayer Service" },
+    { "day": "Friday", "time": "7:30 PM", "name_es": "Culto de Exaltación", "name_en": "Worship Service" }
+  ],
+  "specialSunday": {
+    "pattern": "alternate",
+    "referenceMonth": "2026-11",
+    "referenceType": "santa-cena",
+    "notes": "First Sunday of every month alternates: Santa Cena (during 11:00 AM service) and Ayuno (about 9:00 AM–5:00 PM). Nov 2026 was Santa Cena, Dec 2026 Ayuno."
+  },
+  "verseOfWeek": {
+    "ref_es": "Salmos 133:1",
+    "text_es": "¡Mirad cuán bueno y cuán delicioso es habitar los hermanos juntos en armonía!",
+    "ref_en": "Psalm 133:1",
+    "text_en": "How good and pleasant it is when God’s people live together in unity!"
+  },
+  "features": {
+    "whatsapp": { "enabled": false, "url": "" },
+    "heroVideo": { "enabled": false }
+  }
+}

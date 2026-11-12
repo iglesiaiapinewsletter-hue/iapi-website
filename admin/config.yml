@@ -1,0 +1,121 @@
+backend:
+  name: github
+  repo: iglesiaiapinewsletter-hue/iapi-website
+  branch: main
+  base_url: https://YOUR-OAUTH-WORKER.example.com # TODO: Sveltia CMS Auth helper (Cloudflare Workers)
+  auth_endpoint: /authorize
+
+media_folder: "assets/uploads"
+public_folder: "/assets/uploads"
+
+locale: "es"
+publish_mode: editorial_workflow
+
+collections:
+  - name: "settings"
+    label: "Configuración del sitio"
+    files:
+      - name: "site"
+        label: "Sitio"
+        file: "content/site.json"
+        fields:
+          - label: "Iglesia"
+            name: "church"
+            widget: "object"
+            fields:
+              - { label: "Nombre legal", name: "legalName", widget: "string" }
+              - { label: "Nombre público", name: "publicName", widget: "string" }
+              - { label: "Lema/Tagline", name: "tagline", widget: "string" }
+              - { label: "Dirección", name: "address", widget: "string" }
+              - { label: "Teléfono", name: "phone", widget: "string" }
+              - { label: "Correo público", name: "contactEmail", widget: "string" }
+              - { label: "Correo de formularios", name: "formsEmail", widget: "string" }
+              - { label: "Pastor", name: "pastor", widget: "string" }
+          - label: "Redes sociales"
+            name: "socials"
+            widget: "object"
+            fields:
+              - { label: "YouTube", name: "youtube", widget: "string" }
+              - { label: "Facebook", name: "facebook", widget: "string" }
+              - { label: "Instagram", name: "instagram", widget: "string" }
+              - { label: "TikTok", name: "tiktok", widget: "string" }
+          - label: "YouTube"
+            name: "youtube"
+            widget: "object"
+            fields:
+              - { label: "ID de canal", name: "channelId", widget: "string" }
+          - label: "Ofrendas (Zelle)"
+            name: "giving"
+            widget: "object"
+            fields:
+              - { label: "Método", name: "method", widget: "string" }
+              - { label: "Destinatario", name: "recipient", widget: "string" }
+              - { label: "Nombre mostrado", name: "displayName", widget: "string" }
+          - label: "Primer domingo especial"
+            name: "specialSunday"
+            widget: "object"
+            fields:
+              - { label: "Patrón", name: "pattern", widget: "string" }
+              - { label: "Mes de referencia (YYYY-MM)", name: "referenceMonth", widget: "string" }
+              - { label: "Tipo de referencia", name: "referenceType", widget: "string" }
+              - { label: "Notas", name: "notes", widget: "text", required: false }
+          - label: "Versículo de la semana"
+            name: "verseOfWeek"
+            widget: "object"
+            fields:
+              - { label: "Referencia (ES)", name: "ref_es", widget: "string" }
+              - { label: "Texto (ES)", name: "text_es", widget: "text" }
+              - { label: "Referencia (EN)", name: "ref_en", widget: "string", required: false }
+              - { label: "Texto (EN)", name: "text_en", widget: "text", required: false }
+  - name: "events"
+    label: "Eventos"
+    files:
+      - name: "events"
+        label: "Lista de eventos"
+        file: "content/events.json"
+        fields:
+          - label: "Eventos"
+            name: "events"
+            widget: "list"
+            summary: "{{fields.title_es}} — {{fields.date}}"
+            fields:
+              - { label: "Título (ES)", name: "title_es", widget: "string" }
+              - { label: "Título (EN)", name: "title_en", widget: "string", required: false }
+              - { label: "Fecha", name: "date", widget: "string", hint: "Ej: 2026-12-01 o 2026-11-06 al 2026-11-15" }
+              - { label: "Hora", name: "time", widget: "string", required: false }
+              - { label: "Lugar", name: "location", widget: "string", required: false }
+              - { label: "Descripción (ES)", name: "description_es", widget: "text", required: false }
+              - { label: "Descripción (EN)", name: "description_en", widget: "text", required: false }
+  - name: "announcements"
+    label: "Anuncios / Boletín"
+    files:
+      - name: "announcements"
+        label: "Anuncios"
+        file: "content/announcements.json"
+        fields:
+          - label: "Anuncios"
+            name: "announcements"
+            widget: "list"
+            summary: "{{fields.title_es}}"
+            fields:
+              - { label: "Título (ES)", name: "title_es", widget: "string" }
+              - { label: "Título (EN)", name: "title_en", widget: "string", required: false }
+              - { label: "Fecha", name: "date", widget: "string", required: false }
+              - { label: "Contenido (ES)", name: "body_es", widget: "text" }
+              - { label: "Contenido (EN)", name: "body_en", widget: "text", required: false }
+  - name: "videos"
+    label: "Videos"
+    files:
+      - name: "videos"
+        label: "Configuración de videos"
+        file: "content/videos.json"
+        fields:
+          - { label: "URL base FileBrowser", name: "baseUrl", widget: "string" }
+          - label: "Hero"
+            name: "hero"
+            widget: "object"
+            fields:
+              - { label: "Habilitado", name: "enabled", widget: "boolean", default: false }
+              - { label: "MP4", name: "mp4", widget: "string", required: false }
+              - { label: "WebM", name: "webm", widget: "string", required: false }
+              - { label: "Poster", name: "poster", widget: "string", required: false }

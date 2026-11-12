@@ -1,0 +1,38 @@
+{
+  "lang": "es",
+  "nav": {
+    "home": "Inicio",
+    "visit": "Planifica tu visita",
+    "about": "Nosotros",
+    "ministries": "Ministerios",
+    "watch": "Ver",
+    "events": "Eventos",
+    "announcements": "Anuncios",
+    "give": "Dar",
+    "prayer": "Oración",
+    "contact": "Contacto"
+  },
+  "home": {
+    "heroTitle": "Bienvenido a casa",
+    "heroSubtitle": "Proclamando el señorío de Cristo y reuniéndonos en adoración, oración y la Palabra.",
+    "ctaVisit": "Planifica tu visita",
+    "ctaWatch": "Ver en vivo",
+    "whoWeAre": "Quiénes somos",
+    "whatToExpect": "Qué esperar",
+    "latestMessage": "Último mensaje",
+    "events": "Eventos",
+    "verseOfWeek": "Versículo de la semana",
+    "location": "Ubicación"
+  },
+  "forms": {
+    "send": "Enviar",
+    "privacy": "Acepto la política de privacidad.",
+    "privateNotice": "Tu información se envía en privado a la iglesia."
+  },
+  "common": {
+    "directions": "Cómo llegar",
+    "call": "Llamar",
+    "learnMore": "Conócenos",
+    "seeAll": "Ver todos"
+  }
+}

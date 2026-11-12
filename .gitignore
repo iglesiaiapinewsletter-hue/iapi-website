@@ -1,0 +1,8 @@
+.DS_Store
+._*
+node_modules/
+.netlify/
+lighthouse-report*.json
+*.log
+photos-inbox/
+photos-originals/

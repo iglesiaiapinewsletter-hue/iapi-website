@@ -1,0 +1,10 @@
+{
+  "name": "iapi-website",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "start": "python3 -m http.server 8080 --bind 127.0.0.1",
+    "audit": "echo \"TODO: run Lighthouse audits (e.g. npx lighthouse http://127.0.0.1:8080 --output=json --output-path=./lighthouse-report.json)\"",
+    "photos": "node scripts/photos.js"
+  }
+}

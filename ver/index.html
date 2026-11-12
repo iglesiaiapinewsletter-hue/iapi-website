@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ver | IAPI Irving</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="icon" type="image/png" href="/assets/images/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
+  <link rel="shortcut icon" href="/assets/images/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+</head>
+<body>
+  <a class="skip-link" href="#main">Saltar al contenido</a>
+  <header class="site-header"><div class="container header-inner"><a class="brand" href="/"><img src="/assets/images/logo.png" alt="Logo de IAPI"><span>IAPI Irving</span></a><nav aria-label="Principal"><ul class="nav-links"><li><a href="/ver/" aria-current="page">Ver</a></li><li><a href="/eventos/">Eventos</a></li></ul></nav></div></header>
+  <main id="main" style="padding-top:var(--header-h);">
+    <section class="section page-intro"><div class="container"><p class="eyebrow">Transmisiones y mensajes</p><h1>Ver en línea</h1><p class="lead">Acompáñanos en vivo los domingos y viernes, o mira mensajes recientes.</p></div></section>
+    <section class="section section-alt"><div class="container grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr));">
+      <div class="card">
+        <h2>En vivo (YouTube)</h2>
+        <p>Haz clic para cargar la transmisión cuando esté disponible.</p>
+        <button class="btn btn-primary" data-embed data-src="https://www.youtube-nocookie.com/embed/live_stream?channel=UCidzfKBmsuv01CCQIQkCofw">Cargar transmisión</button>
+        <div class="embed-slot" style="margin-top:1rem;aspect-ratio:16/9;background:rgba(255,255,255,.04);border-radius:12px;overflow:hidden;"></div>
+        <p style="margin-top:1rem;"><a href="https://www.youtube.com/aypirving" target="_blank" rel="noopener">Ver en YouTube</a></p>
+      </div>
+      <div class="card">
+        <h2>Facebook</h2>
+        <p>También transmitimos en Facebook.</p>
+        <p><a class="btn btn-secondary" href="https://www.facebook.com/apostolesyprofetasirving/live" target="_blank" rel="noopener">Ver en Facebook</a></p>
+        <p style="color:var(--color-text-muted);font-size:.95rem;">Síguenos en Facebook para ver nuestras transmisiones en vivo cuando estén disponibles.</p>
+      </div>
+    </div></section>
+    <section class="section"><div class="container">
+      <div style="display:flex;justify-content:space-between;gap:1rem;align-items:end;flex-wrap:wrap;">
+        <div><p class="eyebrow">Mensajes recientes</p><h2>Archivo de predicaciones</h2></div>
+        <input id="sermonSearch" type="search" placeholder="Buscar mensaje" style="padding:.7rem 1rem;border-radius:999px;border:1px solid var(--color-border);background:rgba(255,255,255,.04);color:#fff;min-width:240px;">
+      </div>
+      <div id="sermonFilters" style="margin-top:1rem;display:grid;gap:.75rem;"></div>
+      <div id="sermons" class="grid grid-3" style="margin-top:1.5rem;"></div>
+      <p id="sermonsFallback" style="color:var(--color-text-muted);"></p>
+    </div></section>
+  </main>
+  <footer class="site-footer"><div class="container">
+    <p><strong>Iglesia Apóstoles y Profetas Irving (IAPI)</strong></p>
+    <p>530 N O'Connor Rd, Irving, TX 75061 · <a href="tel:+19039980338">(903) 998-0338</a></p>
+    <p style="margin-top:.75rem;font-size:.95rem;"><a href="/privacidad/">Privacidad</a> · <a href="/terminos/">Términos</a> · <a href="/cookies/">Cookies</a> · <a href="/accesibilidad/">Accesibilidad</a> · <a href="#cookie-settings">Configuración de cookies</a></p>
+    <p style="font-size:.95rem;">© 2026 Iglesia Apostoles y Profetas USA en Irving.</p>
+  </div></footer>
+  <script src="/assets/js/sermon-title-parser.js"></script>
+  <script>
+    document.addEventListener('click', (e)=>{
+      const b=e.target.closest('[data-embed]'); if(!b) return;
+      const slot=b.parentElement.querySelector('.embed-slot'); if(!slot||slot.dataset.loaded) return;
+      const iframe=document.createElement('iframe'); iframe.src=b.getAttribute('data-src'); iframe.title='Transmisión en vivo'; iframe.loading='lazy';
+      iframe.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'; iframe.allowFullscreen=true;
+      iframe.style.width='100%'; iframe.style.height='100%'; iframe.style.border='0'; slot.appendChild(iframe); slot.dataset.loaded='1'; b.remove();
+    });
+    (async function(){
+      const list=document.getElementById('sermons');
+      const fallback=document.getElementById('sermonsFallback');
+      const search=document.getElementById('sermonSearch');
+      const filtersEl=document.getElementById('sermonFilters');
+      const parser = window.IAPISermonParser || { parseSermonTitle: (t)=>({original:t||'',parsed:false,serviceType:null,date:null,displayTitle:t||''}), monthYearLabel:(m)=>m };
+      let items=[];
+      let activeType='all';
+      let activeMonth='all';
+
+      function chip(label, active, attrs='') {
+        return `<button type="button" class="btn ${active?'btn-primary':'btn-secondary'}" data-chip="1" ${attrs} style="padding:.45rem .8rem;font-size:.9rem;">${label}</button>`;
+      }
+
+      function buildFilters() {
+        const typeSet = new Set();
+        const monthSet = new Set();
+        items.forEach(i => {
+          if (i.meta?.serviceType) typeSet.add(i.meta.serviceType);
+          if (i.meta?.date?.monthYear) monthSet.add(i.meta.date.monthYear);
+        });
+        const types = ['all', ...Array.from(typeSet)];
+        const months = ['all', ...Array.from(monthSet).sort().reverse()];
+        filtersEl.innerHTML = `
+          <div><div style="font-size:.85rem;color:var(--color-text-muted);margin-bottom:.35rem;">Tipo de servicio</div><div style="display:flex;flex-wrap:wrap;gap:.5rem;">${types.map(t=>chip(t==='all'?'Todos':t, activeType===t, `data-type="${t}"`)).join('')}</div></div>
+          <div><div style="font-size:.85rem;color:var(--color-text-muted);margin-bottom:.35rem;">Mes / Año</div><div style="display:flex;flex-wrap:wrap;gap:.5rem;">${months.map(m=>chip(m==='all'?'Todos':parser.monthYearLabel(m), activeMonth===m, `data-month="${m}"`)).join('')}</div></div>
+        `;
+      }
+
+      function render(){
+        const q=(search.value||'').toLowerCase();
+        const filtered=items.filter(i=>{
+          const hay = `${i.title||''} ${i.meta?.serviceType||''} ${i.meta?.date?.label||''}`.toLowerCase();
+          if (q && !hay.includes(q)) return false;
+          const unmatched = !i.meta || i.meta.parsed === false;
+          if (unmatched) return true; // never hide or break unmatched titles
+          if (activeType !== 'all' && i.meta.serviceType !== activeType) return false;
+          if (activeMonth !== 'all' && i.meta?.date?.monthYear !== activeMonth) return false;
+          return true;
+        });
+        if(!filtered.length){list.innerHTML='<div class="card"><p>No hay mensajes para mostrar.</p></div>';return;}
+        list.innerHTML=filtered.map(i=>{
+          const meta = i.meta || {};
+          const bits = [meta.serviceType, meta.date?.label].filter(Boolean);
+          const metaLine = bits.length ? bits.join(' · ') : (i.published || '');
+          return `<article class="card"><h3 style="font-size:1.3rem;">${(i.title||'Mensaje')}</h3><p style="color:var(--color-text-muted);font-size:.95rem;">${metaLine || ''}</p><p><a href="${i.link||'#'}" target="_blank" rel="noopener">Ver en YouTube</a></p></article>`;
+        }).join('');
+      }
+
+      filtersEl.addEventListener('click', (e)=>{
+        const b=e.target.closest('[data-chip]'); if(!b) return;
+        if (b.dataset.type) activeType = b.dataset.type;
+        if (b.dataset.month) activeMonth = b.dataset.month;
+        buildFilters(); render();
+      });
+
+      try{
+        const r=await fetch('/.netlify/functions/sermons'); if(!r.ok) throw new Error('bad');
+        const d=await r.json();
+        items=(d.items||[]).map(i => ({...i, meta: parser.parseSermonTitle(i.title || '')}));
+        buildFilters();
+        render();
+        search.addEventListener('input',render);
+      }catch(e){
+        fallback.innerHTML='No pudimos cargar el archivo automáticamente ahora. <a href="https://www.youtube.com/aypirving" target="_blank" rel="noopener">Visita nuestro canal de YouTube</a>.';
+        list.innerHTML='';
+      }
+    })();
+  </script>
+  <script src="/assets/js/main.js" defer></script>
+</body>
+</html>

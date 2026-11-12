@@ -1,0 +1,38 @@
+{
+  "lang": "en",
+  "nav": {
+    "home": "Home",
+    "visit": "Plan your visit",
+    "about": "About",
+    "ministries": "Ministries",
+    "watch": "Watch",
+    "events": "Events",
+    "announcements": "Announcements",
+    "give": "Give",
+    "prayer": "Prayer",
+    "contact": "Contact"
+  },
+  "home": {
+    "heroTitle": "Welcome home",
+    "heroSubtitle": "Proclaiming the lordship of Christ and gathering in worship, prayer, and the Word.",
+    "ctaVisit": "Plan your visit",
+    "ctaWatch": "Watch live",
+    "whoWeAre": "Who we are",
+    "whatToExpect": "What to expect",
+    "latestMessage": "Latest message",
+    "events": "Events",
+    "verseOfWeek": "Verse of the week",
+    "location": "Location"
+  },
+  "forms": {
+    "send": "Send",
+    "privacy": "I agree to the privacy policy.",
+    "privateNotice": "Your information is sent privately to the church."
+  },
+  "common": {
+    "directions": "Directions",
+    "call": "Call",
+    "learnMore": "Learn more",
+    "seeAll": "See all"
+  }
+}

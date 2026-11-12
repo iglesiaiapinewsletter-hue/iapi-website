@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dar | IAPI Irving</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="icon" type="image/png" href="/assets/images/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
+  <link rel="shortcut icon" href="/assets/images/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+</head>
+<body>
+  <a class="skip-link" href="#main">Saltar al contenido</a>
+  <header class="site-header"><div class="container header-inner"><a class="brand" href="/"><img src="/assets/images/logo.png" alt="Logo de IAPI"><span>IAPI Irving</span></a><nav aria-label="Principal"><ul class="nav-links"><li><a href="/planifica-tu-visita/">Planifica tu visita</a></li><li><a href="/dar/" aria-current="page">Dar</a></li><li><a href="/contacto/">Contacto</a></li></ul></nav></div></header>
+  <main id="main" style="padding-top:var(--header-h);">
+    <section class="section page-intro"><div class="container" style="max-width:800px;">
+      <p class="eyebrow">Dar</p>
+      <h1>Tu generosidad hace la diferencia</h1>
+      <p class="lead">Gracias por apoyar la obra de la iglesia. Actualmente recibimos ofrendas y diezmos por <strong>Zelle</strong>.</p>
+      <div class="card" style="margin-top:1.5rem;">
+        <h2 style="font-size:1.8rem;">Dar con Zelle</h2>
+        <p><strong>Enviar a (teléfono):</strong> <span id="zellePhone">(903) 998-0338</span> <button class="btn btn-secondary" type="button" data-copy="#zellePhone" style="margin-left:.5rem;padding:.4rem .8rem;">Copiar</button></p>
+        <p><strong>Nombre que aparece:</strong> <span id="zelleName">Iglesia Apostoles y Profetas USA en Irving</span> <button class="btn btn-secondary" type="button" data-copy="#zelleName" style="margin-left:.5rem;padding:.4rem .8rem;">Copiar</button></p>
+        <ol style="padding-left:1.2rem;color:var(--color-text-muted);">
+          <li>Abre tu app bancaria y selecciona <strong>Zelle</strong>.</li>
+          <li>Agrega el destinatario usando el número de teléfono indicado.</li>
+          <li>Verifica que el nombre mostrado sea el de la iglesia.</li>
+          <li>Ingresa el monto y una nota opcional (ej. "Ofrenda" o "Diezmo").</li>
+        </ol>
+        <p style="font-size:.95rem;color:var(--color-text-muted);"><strong>Aviso:</strong> No recopilamos datos de pago en este sitio. Las ofrendas pueden ser deducibles de impuestos según corresponda; consulta a tu asesor fiscal. IAPI es una iglesia reconocida como 501(c)(3).</p>
+      </div>
+    </div></section>
+  </main>
+  <footer class="site-footer"><div class="container">
+    <p><strong>Iglesia Apóstoles y Profetas Irving (IAPI)</strong></p>
+    <p>530 N O'Connor Rd, Irving, TX 75061 · <a href="tel:+19039980338">(903) 998-0338</a></p>
+    <p style="margin-top:.75rem;font-size:.95rem;"><a href="/privacidad/">Privacidad</a> · <a href="/terminos/">Términos</a> · <a href="/cookies/">Cookies</a> · <a href="/accesibilidad/">Accesibilidad</a> · <a href="#cookie-settings">Configuración de cookies</a></p>
+    <p style="font-size:.95rem;">© 2026 Iglesia Apostoles y Profetas USA en Irving.</p>
+  </div></footer>
+  <script>
+    document.addEventListener('click', async (e) => {
+      const b = e.target.closest('[data-copy]'); if(!b) return;
+      const el = document.querySelector(b.getAttribute('data-copy')); if(!el) return;
+      try { await navigator.clipboard.writeText(el.textContent.trim()); const t=b.textContent; b.textContent='Copiado'; setTimeout(()=>b.textContent=t,1500); } catch(_){}
+    });
+  </script>
+  <script src="/assets/js/main.js" defer></script>
+</body>
+</html>
