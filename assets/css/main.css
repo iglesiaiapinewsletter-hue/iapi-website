@@ -84,7 +84,7 @@ p { margin: 0 0 1rem; }
   position: relative;
   background:
     linear-gradient(rgba(2,8,18,.88), rgba(4,14,30,.84)),
-    url('/assets/images/library/events/events-225-dsc-0021-1200.webp') center/cover no-repeat;
+    url('/assets/images/library/events/events-232-dsc-0045-1200.webp') center/cover no-repeat;
 }
 
 .btn {
@@ -125,7 +125,7 @@ p { margin: 0 0 1rem; }
   background:
     linear-gradient(90deg, rgba(2,8,18,.94) 0%, rgba(4,14,30,.78) 42%, rgba(4,14,30,.45) 100%),
     linear-gradient(to top, rgba(2,8,18,.92) 0%, rgba(4,14,30,.2) 55%),
-    url('/assets/images/library/events/events-223-dsc-0008-1200.webp') center/cover no-repeat;
+    url('/assets/images/library/events/events-230-dsc-0041-1200.webp') center/cover no-repeat;
 }
 .hero-content { position: relative; z-index: 1; padding: calc(var(--header-h) + 4.5rem) 1rem 5.5rem 2rem; width: 100%; box-sizing: border-box; }
 .hero-content > * { max-width: 100%; }
@@ -172,7 +172,7 @@ p { margin: 0 0 1rem; }
   overflow: hidden;
   background:
     linear-gradient(110deg, rgba(2,8,18,.95) 0%, rgba(4,14,30,.86) 45%, rgba(6,29,64,.72) 100%),
-    url('/assets/images/library/events/events-224-dsc-0013-1200.webp') center/cover no-repeat;
+    url('/assets/images/library/events/events-235-dsc-0061-1200.webp') center/cover no-repeat;
 }
 .about-showcase-grid {
   display: grid;
