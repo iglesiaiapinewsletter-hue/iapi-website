@@ -6,3 +6,4 @@ lighthouse-report*.json
 *.log
 photos-inbox/
 photos-originals/
+reference/old-site/
