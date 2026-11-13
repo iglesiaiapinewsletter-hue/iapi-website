@@ -17,7 +17,7 @@
   <a class="skip-link" href="#main" data-i18n="common.skipToContent">Saltar al contenido</a>
   <header class="site-header"><div class="container header-inner"><a class="brand" href="/"><img src="/assets/images/logo.png" alt="Logo de IAPI"><span>IAPI Irving</span></a><nav aria-label="Principal"><ul class="nav-links"><li><a href="/eventos/" aria-current="page" data-i18n="nav.events">Eventos</a></li><li><a href="/anuncios/" data-i18n="nav.announcements">Anuncios</a></li></ul></nav></div></header>
   <main id="main" style="padding-top:var(--header-h);">
-    <section class="section page-intro"><div class="container"><p class="eyebrow">Eventos</p><h1>Próximos eventos</h1><p class="lead">Mantente al tanto de lo que está pasando en nuestra iglesia.</p><div id="eventsList" class="grid" style="margin-top:1.5rem;"></div></div></section>
+    <section class="section page-intro"><div class="container"><p class="eyebrow" data-i18n="events.eyebrow">Eventos</p><h1 data-i18n="events.title">Próximos eventos</h1><p class="lead" data-i18n="events.lead">Mantente al tanto de lo que está pasando en nuestra iglesia.</p><div id="eventsList" class="grid" style="margin-top:1.5rem;"></div></div></section>
   </main>
   <footer class="site-footer"><div class="container">
     <p><strong>Iglesia Apóstoles y Profetas Irving (IAPI)</strong></p>
@@ -37,12 +37,29 @@
   <script>
     (async function(){
       const el = document.getElementById('eventsList');
-      try {
-        const res = await fetch('/content/events.json'); const data = await res.json();
-        const events = data.events || [];
-        if(!events.length){ el.innerHTML = '<div class="card"><h2>Próximamente</h2><p>Pronto compartiremos nuevos eventos.</p></div>'; return; }
-        el.innerHTML = events.map(ev => `<article class="card"><h2>${ev.title_es || ev.title || ''}</h2><p><strong>${ev.date||''}</strong> ${ev.time?('· '+ev.time):''}</p><p>${ev.location||''}</p><p>${ev.description_es||ev.description||''}</p></article>`).join('');
-      } catch(e){ el.innerHTML = '<div class="card"><p>No pudimos cargar los eventos en este momento.</p></div>'; }
+      let data = null;
+      async function render(){
+        const lang = document.documentElement.lang === 'en' ? 'en' : 'es';
+        try {
+          if (!data) { const res = await fetch('/content/events.json', {cache:'no-store'}); data = await res.json(); }
+          const events = data.events || [];
+          if(!events.length){
+            const t = (data.upcomingMessage && (data.upcomingMessage[lang] || data.upcomingMessage.es)) || (lang==='en'?'Coming soon':'Próximamente');
+            const d = lang==='en' ? 'We’ll share new events soon.' : 'Pronto compartiremos nuevos eventos.';
+            el.innerHTML = `<div class="card"><h2>${t}</h2><p>${d}</p></div>`;
+            return;
+          }
+          el.innerHTML = events.map(ev => {
+            const title = (lang==='en' ? (ev.title_en || ev.title_es) : (ev.title_es || ev.title_en)) || ev.title || '';
+            const desc = (lang==='en' ? (ev.description_en || ev.description_es) : (ev.description_es || ev.description_en)) || ev.description || '';
+            return `<article class="card"><h2>${title}</h2><p><strong>${ev.date||''}</strong> ${ev.time?('· '+ev.time):''}</p><p>${ev.location||''}</p><p>${desc}</p></article>`;
+          }).join('');
+        } catch(e){
+          el.innerHTML = `<div class="card"><p>${lang==='en'?'We couldn’t load events right now.':'No pudimos cargar los eventos en este momento.'}</p></div>`;
+        }
+      }
+      render();
+      window.addEventListener('iapi:langchange', render);
     })();
   </script>
   <script src="/assets/js/main.js" defer></script>

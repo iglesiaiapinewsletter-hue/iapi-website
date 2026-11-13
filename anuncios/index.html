@@ -18,7 +18,7 @@
   <a class="skip-link" href="#main" data-i18n="common.skipToContent">Saltar al contenido</a>
   <header class="site-header"><div class="container header-inner"><a class="brand" href="/"><img src="/assets/images/logo.png" alt="Logo de IAPI"><span>IAPI Irving</span></a><nav aria-label="Principal"><ul class="nav-links"><li><a href="/anuncios/" aria-current="page" data-i18n="nav.announcements">Anuncios</a></li><li><a href="/eventos/" data-i18n="nav.events">Eventos</a></li></ul></nav></div></header>
   <main id="main" style="padding-top:var(--header-h);">
-    <section class="section page-intro"><div class="container"><div style="display:flex;justify-content:space-between;gap:1rem;align-items:end;flex-wrap:wrap;"><div><p class="eyebrow">Boletín</p><h1>Anuncios</h1><p class="lead">Noticias y anuncios de la iglesia.</p></div><button class="btn btn-secondary no-print" onclick="window.print()">Imprimir</button></div><div id="annList" class="grid" style="margin-top:1.5rem;"></div></div></section>
+    <section class="section page-intro"><div class="container"><div style="display:flex;justify-content:space-between;gap:1rem;align-items:end;flex-wrap:wrap;"><div><p class="eyebrow" data-i18n="announcements.eyebrow">Boletín</p><h1 data-i18n="announcements.title">Anuncios</h1><p class="lead" data-i18n="announcements.lead">Noticias y anuncios de la iglesia.</p></div><button class="btn btn-secondary no-print" onclick="window.print()" data-i18n="announcements.print">Imprimir</button></div><div id="annList" class="grid" style="margin-top:1.5rem;"></div></div></section>
   </main>
   <footer class="site-footer"><div class="container">
     <p><strong>Iglesia Apóstoles y Profetas Irving (IAPI)</strong></p>
@@ -38,10 +38,26 @@
   <script>
     (async function(){
       const el=document.getElementById('annList');
-      try{const r=await fetch('/content/announcements.json');const d=await r.json();const items=d.announcements||[];
-        if(!items.length){el.innerHTML='<div class="card"><h2>Próximamente</h2><p>No hay anuncios publicados por ahora.</p></div>';return;}
-        el.innerHTML=items.map(a=>`<article class="card"><h2>${a.title_es||a.title||''}</h2><p><strong>${a.date||''}</strong></p><p>${a.body_es||a.body||''}</p></article>`).join('');
-      }catch(e){el.innerHTML='<div class="card"><p>No pudimos cargar los anuncios.</p></div>';}
+      let data = null;
+      async function render(){
+        const lang = document.documentElement.lang === 'en' ? 'en' : 'es';
+        try{
+          if (!data) { const r=await fetch('/content/announcements.json', {cache:'no-store'}); data=await r.json(); }
+          const items=data.announcements||[];
+          if(!items.length){
+            const t = lang==='en' ? 'Coming soon' : 'Próximamente';
+            const d = lang==='en' ? 'No announcements have been published yet.' : 'No hay anuncios publicados por ahora.';
+            el.innerHTML=`<div class="card"><h2>${t}</h2><p>${d}</p></div>`;return;
+          }
+          el.innerHTML=items.map(a=>{
+            const title = (lang==='en' ? (a.title_en || a.title_es) : (a.title_es || a.title_en)) || a.title || '';
+            const body = (lang==='en' ? (a.body_en || a.body_es) : (a.body_es || a.body_en)) || a.body || '';
+            return `<article class="card"><h2>${title}</h2><p><strong>${a.date||''}</strong></p><p>${body}</p></article>`;
+          }).join('');
+        }catch(e){el.innerHTML=`<div class="card"><p>${lang==='en'?'We couldn’t load announcements.':'No pudimos cargar los anuncios.'}</p></div>`;}
+      }
+      render();
+      window.addEventListener('iapi:langchange', render);
     })();
   </script>
   <script src="/assets/js/main.js" defer></script>

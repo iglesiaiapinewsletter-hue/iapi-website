@@ -17,26 +17,26 @@
   <a class="skip-link" href="#main" data-i18n="common.skipToContent">Saltar al contenido</a>
   <header class="site-header"><div class="container header-inner"><a class="brand" href="/"><img src="/assets/images/logo.png" alt="Logo de IAPI"><span>IAPI Irving</span></a><nav aria-label="Principal"><ul class="nav-links"><li><a href="/ver/" aria-current="page" data-i18n="nav.watch">Ver</a></li><li><a href="/eventos/" data-i18n="nav.events">Eventos</a></li></ul></nav></div></header>
   <main id="main" style="padding-top:var(--header-h);">
-    <section class="section page-intro"><div class="container"><p class="eyebrow">Transmisiones y mensajes</p><h1>Ver en línea</h1><p class="lead">Acompáñanos en vivo los domingos y viernes, o mira mensajes recientes.</p></div></section>
+    <section class="section page-intro"><div class="container"><p class="eyebrow" data-i18n="watch.eyebrow">Transmisiones y mensajes</p><h1 data-i18n="watch.title">Ver en línea</h1><p class="lead" data-i18n="watch.lead">Acompáñanos en vivo los domingos y viernes, o mira mensajes recientes.</p></div></section>
     <section class="section section-alt"><div class="container grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr));">
       <div class="card">
-        <h2>En vivo (YouTube)</h2>
-        <p>Haz clic para cargar la transmisión cuando esté disponible.</p>
-        <button class="btn btn-primary" data-embed data-src="https://www.youtube-nocookie.com/embed/live_stream?channel=UCidzfKBmsuv01CCQIQkCofw">Cargar transmisión</button>
+        <h2 data-i18n="watch.liveTitle">En vivo (YouTube)</h2>
+        <p data-i18n="watch.liveDesc">Haz clic para cargar la transmisión cuando esté disponible.</p>
+        <button class="btn btn-primary" data-embed data-src="https://www.youtube-nocookie.com/embed/live_stream?channel=UCidzfKBmsuv01CCQIQkCofw" data-i18n="watch.loadStream">Cargar transmisión</button>
         <div class="embed-slot" style="margin-top:1rem;aspect-ratio:16/9;background:rgba(255,255,255,.04);border-radius:12px;overflow:hidden;"></div>
-        <p style="margin-top:1rem;"><a href="https://www.youtube.com/aypirving" target="_blank" rel="noopener">Ver en YouTube</a></p>
+        <p style="margin-top:1rem;"><a href="https://www.youtube.com/aypirving" target="_blank" rel="noopener" data-i18n="watch.watchOnYouTube">Ver en YouTube</a></p>
       </div>
       <div class="card">
-        <h2>Facebook</h2>
-        <p>También transmitimos en Facebook.</p>
-        <p><a class="btn btn-secondary" href="https://www.facebook.com/apostolesyprofetasirving/live" target="_blank" rel="noopener">Ver en Facebook</a></p>
-        <p style="color:var(--color-text-muted);font-size:.95rem;">Síguenos en Facebook para ver nuestras transmisiones en vivo cuando estén disponibles.</p>
+        <h2 data-i18n="watch.fbTitle">Facebook</h2>
+        <p data-i18n="watch.fbDesc">También transmitimos en Facebook.</p>
+        <p><a class="btn btn-secondary" href="https://www.facebook.com/apostolesyprofetasirving/live" target="_blank" rel="noopener" data-i18n="watch.watchOnFacebook">Ver en Facebook</a></p>
+        <p style="color:var(--color-text-muted);font-size:.95rem;" data-i18n="watch.fbNote">Síguenos en Facebook para ver nuestras transmisiones en vivo cuando estén disponibles.</p>
       </div>
     </div></section>
     <section class="section"><div class="container">
       <div style="display:flex;justify-content:space-between;gap:1rem;align-items:end;flex-wrap:wrap;">
-        <div><p class="eyebrow">Mensajes recientes</p><h2>Archivo de predicaciones</h2></div>
-        <input id="sermonSearch" type="search" placeholder="Buscar mensaje" style="padding:.7rem 1rem;border-radius:999px;border:1px solid var(--color-border);background:rgba(255,255,255,.04);color:#fff;min-width:240px;">
+        <div><p class="eyebrow" data-i18n="watch.recentEyebrow">Mensajes recientes</p><h2 data-i18n="watch.archiveTitle">Archivo de predicaciones</h2></div>
+        <input id="sermonSearch" type="search" placeholder="Buscar mensaje" data-i18n-placeholder="watch.searchPlaceholder" style="padding:.7rem 1rem;border-radius:999px;border:1px solid var(--color-border);background:rgba(255,255,255,.04);color:#fff;min-width:240px;">
       </div>
       <div id="sermonFilters" style="margin-top:1rem;display:grid;gap:.75rem;"></div>
       <div id="sermons" class="grid grid-3" style="margin-top:1.5rem;"></div>
@@ -63,7 +63,7 @@
     document.addEventListener('click', (e)=>{
       const b=e.target.closest('[data-embed]'); if(!b) return;
       const slot=b.parentElement.querySelector('.embed-slot'); if(!slot||slot.dataset.loaded) return;
-      const iframe=document.createElement('iframe'); iframe.src=b.getAttribute('data-src'); iframe.title='Transmisión en vivo'; iframe.loading='lazy';
+      const iframe=document.createElement('iframe'); iframe.src=b.getAttribute('data-src'); iframe.title=(document.documentElement.lang==='en'?'Live stream':'Transmisión en vivo'); iframe.loading='lazy';
       iframe.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'; iframe.allowFullscreen=true;
       iframe.style.width='100%'; iframe.style.height='100%'; iframe.style.border='0'; slot.appendChild(iframe); slot.dataset.loaded='1'; b.remove();
     });
@@ -76,6 +76,18 @@
       let items=[];
       let activeType='all';
       let activeMonth='all';
+      let i18n = null;
+
+      async function loadI18n() {
+        const lang = document.documentElement.lang === 'en' ? 'en' : 'es';
+        try { const r = await fetch('/content/i18n/' + lang + '.json', { cache: 'no-store' }); i18n = await r.json(); } catch { i18n = null; }
+      }
+      function W(path, es, en) {
+        const lang = document.documentElement.lang === 'en' ? 'en' : 'es';
+        const parts = path.split('.');
+        let v = i18n; for (const p of parts) v = v && v[p];
+        return (typeof v === 'string') ? v : (lang === 'en' ? en : es);
+      }
 
       function chip(label, active, attrs='') {
         return `<button type="button" class="btn ${active?'btn-primary':'btn-secondary'}" data-chip="1" ${attrs} style="padding:.45rem .8rem;font-size:.9rem;">${label}</button>`;
@@ -90,29 +102,34 @@
         });
         const types = ['all', ...Array.from(typeSet)];
         const months = ['all', ...Array.from(monthSet).sort().reverse()];
+        const allLabel = W('watch.all','Todos','All');
+        const typeLabel = W('watch.filterType','Tipo de servicio','Service type');
+        const monthLabel = W('watch.filterMonth','Mes / Año','Month / Year');
         filtersEl.innerHTML = `
-          <div><div style="font-size:.85rem;color:var(--color-text-muted);margin-bottom:.35rem;">Tipo de servicio</div><div style="display:flex;flex-wrap:wrap;gap:.5rem;">${types.map(t=>chip(t==='all'?'Todos':t, activeType===t, `data-type="${t}"`)).join('')}</div></div>
-          <div><div style="font-size:.85rem;color:var(--color-text-muted);margin-bottom:.35rem;">Mes / Año</div><div style="display:flex;flex-wrap:wrap;gap:.5rem;">${months.map(m=>chip(m==='all'?'Todos':parser.monthYearLabel(m), activeMonth===m, `data-month="${m}"`)).join('')}</div></div>
+          <div><div style="font-size:.85rem;color:var(--color-text-muted);margin-bottom:.35rem;">${typeLabel}</div><div style="display:flex;flex-wrap:wrap;gap:.5rem;">${types.map(t=>chip(t==='all'?allLabel:t, activeType===t, `data-type="${t}"`)).join('')}</div></div>
+          <div><div style="font-size:.85rem;color:var(--color-text-muted);margin-bottom:.35rem;">${monthLabel}</div><div style="display:flex;flex-wrap:wrap;gap:.5rem;">${months.map(m=>chip(m==='all'?allLabel:parser.monthYearLabel(m), activeMonth===m, `data-month="${m}"`)).join('')}</div></div>
         `;
       }
 
       function render(){
         const q=(search.value||'').toLowerCase();
+        const watchLink = W('watch.watchYouTubeLink','Ver en YouTube','Watch on YouTube');
+        const noMsg = W('watch.noMessages','No hay mensajes para mostrar.','No messages to show.');
         const filtered=items.filter(i=>{
           const hay = `${i.title||''} ${i.meta?.serviceType||''} ${i.meta?.date?.label||''}`.toLowerCase();
           if (q && !hay.includes(q)) return false;
           const unmatched = !i.meta || i.meta.parsed === false;
-          if (unmatched) return true; // never hide or break unmatched titles
+          if (unmatched) return true;
           if (activeType !== 'all' && i.meta.serviceType !== activeType) return false;
           if (activeMonth !== 'all' && i.meta?.date?.monthYear !== activeMonth) return false;
           return true;
         });
-        if(!filtered.length){list.innerHTML='<div class="card"><p>No hay mensajes para mostrar.</p></div>';return;}
+        if(!filtered.length){list.innerHTML=`<div class="card"><p>${noMsg}</p></div>`;return;}
         list.innerHTML=filtered.map(i=>{
           const meta = i.meta || {};
           const bits = [meta.serviceType, meta.date?.label].filter(Boolean);
           const metaLine = bits.length ? bits.join(' · ') : (i.published || '');
-          return `<article class="card"><h3 style="font-size:1.3rem;">${(i.title||'Mensaje')}</h3><p style="color:var(--color-text-muted);font-size:.95rem;">${metaLine || ''}</p><p><a href="${i.link||'#'}" target="_blank" rel="noopener">Ver en YouTube</a></p></article>`;
+          return `<article class="card"><h3 style="font-size:1.3rem;">${(i.title||'Mensaje')}</h3><p style="color:var(--color-text-muted);font-size:.95rem;">${metaLine || ''}</p><p><a href="${i.link||'#'}" target="_blank" rel="noopener">${watchLink}</a></p></article>`;
         }).join('');
       }
 
@@ -123,17 +140,25 @@
         buildFilters(); render();
       });
 
-      try{
-        const r=await fetch('/.netlify/functions/sermons'); if(!r.ok) throw new Error('bad');
-        const d=await r.json();
-        items=(d.items||[]).map(i => ({...i, meta: parser.parseSermonTitle(i.title || '')}));
-        buildFilters();
-        render();
-        search.addEventListener('input',render);
-      }catch(e){
-        fallback.innerHTML='No pudimos cargar el archivo automáticamente ahora. <a href="https://www.youtube.com/aypirving" target="_blank" rel="noopener">Visita nuestro canal de YouTube</a>.';
-        list.innerHTML='';
+      async function init(){
+        await loadI18n();
+        try{
+          if (!items.length) {
+            const r=await fetch('/.netlify/functions/sermons'); if(!r.ok) throw new Error('bad');
+            const d=await r.json();
+            items=(d.items||[]).map(i => ({...i, meta: parser.parseSermonTitle(i.title || '')}));
+          }
+          buildFilters();
+          render();
+          if (!search.dataset.bound) { search.addEventListener('input',render); search.dataset.bound='1'; }
+        }catch(e){
+          fallback.innerHTML = W('watch.fallbackHtml','No pudimos cargar el archivo automáticamente ahora. <a href="https://www.youtube.com/aypirving" target="_blank" rel="noopener">Visita nuestro canal de YouTube</a>.','We couldn’t load the archive automatically right now. <a href="https://www.youtube.com/aypirving" target="_blank" rel="noopener">Visit our YouTube channel</a>.');
+          list.innerHTML='';
+        }
       }
+
+      init();
+      window.addEventListener('iapi:langchange', async ()=>{ await loadI18n(); buildFilters(); render(); if(list.innerHTML==='' && fallback.innerHTML) fallback.innerHTML = W('watch.fallbackHtml','No pudimos cargar el archivo automáticamente ahora. <a href="https://www.youtube.com/aypirving" target="_blank" rel="noopener">Visita nuestro canal de YouTube</a>.','We couldn’t load the archive automatically right now. <a href="https://www.youtube.com/aypirving" target="_blank" rel="noopener">Visit our YouTube channel</a>.'); });
     })();
   </script>
   <script src="/assets/js/main.js" defer></script>

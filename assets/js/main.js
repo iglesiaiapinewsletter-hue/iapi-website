@@ -72,6 +72,8 @@
     renderNextSpecialSunday();
     renderNextService();
     renderHomeExtras();
+    renderCookieBannerText();
+    try { window.dispatchEvent(new CustomEvent('iapi:langchange', { detail: { lang: getLang() } })); } catch {}
   }
 
   function getConsent() {
@@ -87,13 +89,13 @@
     const wrap = document.createElement('div');
     wrap.id = 'cookieBanner';
     wrap.innerHTML = `
-      <div class="cookie-inner card" role="dialog" aria-label="Preferencias de cookies" aria-modal="false">
-        <p style="margin:.2rem 0 .6rem;"><strong>Cookies y privacidad</strong></p>
-        <p style="margin:0 0 .8rem;color:var(--color-text-muted);font-size:.95rem;">Usamos almacenamiento esencial (como idioma). Contenido de terceros (mapas/YouTube) solo se carga cuando tú lo solicitas. Puedes aceptar o rechazar opciones no esenciales.</p>
+      <div class="cookie-inner card" role="dialog" aria-modal="false">
+        <p style="margin:.2rem 0 .6rem;"><strong data-cookie-title>Cookies y privacidad</strong></p>
+        <p style="margin:0 0 .8rem;color:var(--color-text-muted);font-size:.95rem;" data-cookie-text>Usamos almacenamiento esencial (como idioma). Contenido de terceros (mapas/YouTube) solo se carga cuando tú lo solicitas. Puedes aceptar o rechazar opciones no esenciales.</p>
         <div style="display:flex;flex-wrap:wrap;gap:.5rem;">
-          <button class="btn btn-primary" data-consent="accept">Aceptar</button>
-          <button class="btn btn-secondary" data-consent="reject">Rechazar</button>
-          <a class="btn btn-secondary" href="/cookies/">Preferencias</a>
+          <button class="btn btn-primary" data-consent="accept" data-cookie-accept>Aceptar</button>
+          <button class="btn btn-secondary" data-consent="reject" data-cookie-reject>Rechazar</button>
+          <a class="btn btn-secondary" href="/cookies/" data-cookie-prefs>Preferencias</a>
         </div>
       </div>`;
     const style = document.createElement('style');
@@ -108,6 +110,21 @@
       wrap.style.display = 'none';
     });
     if (consent) wrap.style.display = 'none';
+    renderCookieBannerText();
+  }
+
+  async function renderCookieBannerText() {
+    const banner = document.getElementById('cookieBanner');
+    if (!banner) return;
+    const dict = await loadI18n(getLang());
+    const c = (dict && dict.cookieBanner) || {};
+    const inner = banner.querySelector('.cookie-inner');
+    if (inner && c.aria) inner.setAttribute('aria-label', c.aria);
+    const t = banner.querySelector('[data-cookie-title]'); if (t && c.title) t.textContent = c.title;
+    const tx = banner.querySelector('[data-cookie-text]'); if (tx && c.text) tx.textContent = c.text;
+    const a = banner.querySelector('[data-cookie-accept]'); if (a && c.accept) a.textContent = c.accept;
+    const r = banner.querySelector('[data-cookie-reject]'); if (r && c.reject) r.textContent = c.reject;
+    const p = banner.querySelector('[data-cookie-prefs]'); if (p && c.preferences) p.textContent = c.preferences;
   }
 
   function setupLangToggle() {
@@ -128,9 +145,13 @@
       const saved = localStorage.getItem(LANG_KEY);
       if (saved === 'en' || saved === 'es') {
         document.documentElement.lang = saved;
-        if (btn) btn.textContent = saved === 'en' ? 'ES' : 'EN';
+      } else {
+        document.documentElement.lang = 'es'; // default Spanish
       }
-    } catch (e) {}
+    } catch (e) {
+      document.documentElement.lang = document.documentElement.lang || 'es';
+    }
+    if (btn) btn.textContent = getLang() === 'en' ? 'ES' : 'EN';
   }
 
   function computeNextSpecialSunday() {

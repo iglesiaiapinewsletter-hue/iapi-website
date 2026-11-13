@@ -18,18 +18,18 @@
   <header class="site-header"><div class="container header-inner"><a class="brand" href="/"><img src="/assets/images/logo.png" alt="Logo de IAPI"><span>IAPI Irving</span></a><nav aria-label="Principal"><ul class="nav-links"><li><a href="/oracion/" aria-current="page" data-i18n="nav.prayer">Oración</a></li><li><a href="/contacto/" data-i18n="nav.contact">Contacto</a></li></ul></nav></div></header>
   <main id="main" style="padding-top:var(--header-h);">
     <section class="section page-intro"><div class="container" style="max-width:760px;">
-      <p class="eyebrow">Oración</p>
-      <h1>Estamos aquí para orar contigo</h1>
-      <p class="lead">Comparte tu petición y la iglesia orará por ti. También puedes <a href="/visita-pastoral/">solicitar una visita pastoral</a> si lo necesitas.</p>
+      <p class="eyebrow" data-i18n="prayer.eyebrow">Oración</p>
+      <h1 data-i18n="prayer.title">Estamos aquí para orar contigo</h1>
+      <p class="lead" data-i18n-html="prayer.leadHtml">Comparte tu petición y la iglesia orará por ti. También puedes <a href="/visita-pastoral/">solicitar una visita pastoral</a> si lo necesitas.</p>
       <form name="prayer-request" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="card">
         <input type="hidden" name="form-name" value="prayer-request">
-        <p style="display:none;"><label>No llenar: <input name="bot-field"></label></p>
-        <label>Nombre<br><input name="name" required style="width:100%;padding:.7rem;border-radius:10px;border:1px solid var(--color-border);background:rgba(255,255,255,.04);color:#fff;"></label>
-        <label style="display:block;margin-top:1rem;">Teléfono o correo (opcional)<br><input name="contact" style="width:100%;padding:.7rem;border-radius:10px;border:1px solid var(--color-border);background:rgba(255,255,255,.04);color:#fff;"></label>
-        <label style="display:block;margin-top:1rem;">Petición de oración<br><textarea name="request" rows="6" required style="width:100%;padding:.7rem;border-radius:10px;border:1px solid var(--color-border);background:rgba(255,255,255,.04);color:#fff;"></textarea></label>
-        <label style="display:block;margin-top:1rem;"><input type="checkbox" name="privacy" required> Entiendo y acepto la política de privacidad.</label>
-        <p style="margin-top:1rem;"><button class="btn btn-primary" type="submit">Enviar petición</button></p>
-        <p style="font-size:.95rem;color:var(--color-text-muted);"><strong>Tu petición se envía en privado a la iglesia</strong> y no se muestra públicamente.</p>
+        <p style="display:none;"><label><span data-i18n="common.noFill">No llenar:</span> <input name="bot-field"></label></p>
+        <label><span data-i18n="prayer.name">Nombre</span><br><input name="name" required style="width:100%;padding:.7rem;border-radius:10px;border:1px solid var(--color-border);background:rgba(255,255,255,.04);color:#fff;"></label>
+        <label style="display:block;margin-top:1rem;"><span data-i18n="prayer.contactOptional">Teléfono o correo (opcional)</span><br><input name="contact" style="width:100%;padding:.7rem;border-radius:10px;border:1px solid var(--color-border);background:rgba(255,255,255,.04);color:#fff;"></label>
+        <label style="display:block;margin-top:1rem;"><span data-i18n="prayer.request">Petición de oración</span><br><textarea name="request" rows="6" required style="width:100%;padding:.7rem;border-radius:10px;border:1px solid var(--color-border);background:rgba(255,255,255,.04);color:#fff;"></textarea></label>
+        <label style="display:block;margin-top:1rem;"><input type="checkbox" name="privacy" required> <span data-i18n="prayer.privacy">Entiendo y acepto la política de privacidad.</span></label>
+        <p style="margin-top:1rem;"><button class="btn btn-primary" type="submit" data-i18n="prayer.submit">Enviar petición</button></p>
+        <p style="font-size:.95rem;color:var(--color-text-muted);" data-i18n-html="prayer.privateNote"><strong>Tu petición se envía en privado a la iglesia</strong> y no se muestra públicamente.</p>
       </form>
     </div></section>
   </main>

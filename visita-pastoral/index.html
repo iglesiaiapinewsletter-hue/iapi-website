@@ -18,22 +18,22 @@
   <header class="site-header"><div class="container header-inner"><a class="brand" href="/"><img src="/assets/images/logo.png" alt="Logo de IAPI"><span>IAPI Irving</span></a><nav aria-label="Principal"><ul class="nav-links"><li><a href="/oracion/" data-i18n="nav.prayer">Oración</a></li><li><a href="/contacto/" data-i18n="nav.contact">Contacto</a></li></ul></nav></div></header>
   <main id="main" style="padding-top:var(--header-h);">
     <section class="section page-intro"><div class="container" style="max-width:760px;">
-      <p class="eyebrow">Cuidado pastoral</p>
-      <h1>Solicitar una visita pastoral</h1>
-      <p class="lead">Si necesitas una visita o apoyo pastoral, por favor déjanos tus datos. Esta solicitud se envía de forma privada a la iglesia.</p>
+      <p class="eyebrow" data-i18n="pastoral.eyebrow">Cuidado pastoral</p>
+      <h1 data-i18n="pastoral.title">Solicitar una visita pastoral</h1>
+      <p class="lead" data-i18n="pastoral.lead">Si necesitas una visita o apoyo pastoral, por favor déjanos tus datos. Esta solicitud se envía de forma privada a la iglesia.</p>
       <form name="pastoral-visit" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="card">
         <input type="hidden" name="form-name" value="pastoral-visit">
-        <p style="display:none;"><label>No llenar: <input name="bot-field"></label></p>
+        <p style="display:none;"><label><span data-i18n="common.noFill">No llenar:</span> <input name="bot-field"></label></p>
         <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));">
-          <label>Nombre<br><input name="name" required style="width:100%;padding:.7rem;border-radius:10px;border:1px solid var(--color-border);background:rgba(255,255,255,.04);color:#fff;"></label>
-          <label>Teléfono<br><input name="phone" required style="width:100%;padding:.7rem;border-radius:10px;border:1px solid var(--color-border);background:rgba(255,255,255,.04);color:#fff;"></label>
+          <label><span data-i18n="pastoral.name">Nombre</span><br><input name="name" required style="width:100%;padding:.7rem;border-radius:10px;border:1px solid var(--color-border);background:rgba(255,255,255,.04);color:#fff;"></label>
+          <label><span data-i18n="pastoral.phone">Teléfono</span><br><input name="phone" required style="width:100%;padding:.7rem;border-radius:10px;border:1px solid var(--color-border);background:rgba(255,255,255,.04);color:#fff;"></label>
         </div>
-        <label style="display:block;margin-top:1rem;">Zona/área de la ciudad<br><input name="area" required style="width:100%;padding:.7rem;border-radius:10px;border:1px solid var(--color-border);background:rgba(255,255,255,.04);color:#fff;"></label>
-        <label style="display:block;margin-top:1rem;">Mejor horario para contactarte<br><input name="best-time" required style="width:100%;padding:.7rem;border-radius:10px;border:1px solid var(--color-border);background:rgba(255,255,255,.04);color:#fff;"></label>
-        <label style="display:block;margin-top:1rem;">Motivo (opcional)<br><textarea name="reason" rows="5" style="width:100%;padding:.7rem;border-radius:10px;border:1px solid var(--color-border);background:rgba(255,255,255,.04);color:#fff;"></textarea></label>
-        <label style="display:block;margin-top:1rem;"><input type="checkbox" name="privacy" required> Acepto la política de privacidad.</label>
-        <p style="margin-top:1rem;"><button class="btn btn-primary" type="submit">Enviar solicitud</button></p>
-        <p style="font-size:.95rem;color:var(--color-text-muted);">Esta solicitud no se muestra públicamente.</p>
+        <label style="display:block;margin-top:1rem;"><span data-i18n="pastoral.area">Zona/área de la ciudad</span><br><input name="area" required style="width:100%;padding:.7rem;border-radius:10px;border:1px solid var(--color-border);background:rgba(255,255,255,.04);color:#fff;"></label>
+        <label style="display:block;margin-top:1rem;"><span data-i18n="pastoral.bestTime">Mejor horario para contactarte</span><br><input name="best-time" required style="width:100%;padding:.7rem;border-radius:10px;border:1px solid var(--color-border);background:rgba(255,255,255,.04);color:#fff;"></label>
+        <label style="display:block;margin-top:1rem;"><span data-i18n="pastoral.reasonOptional">Motivo (opcional)</span><br><textarea name="reason" rows="5" style="width:100%;padding:.7rem;border-radius:10px;border:1px solid var(--color-border);background:rgba(255,255,255,.04);color:#fff;"></textarea></label>
+        <label style="display:block;margin-top:1rem;"><input type="checkbox" name="privacy" required> <span data-i18n="pastoral.privacy">Acepto la política de privacidad.</span></label>
+        <p style="margin-top:1rem;"><button class="btn btn-primary" type="submit" data-i18n="pastoral.submit">Enviar solicitud</button></p>
+        <p style="font-size:.95rem;color:var(--color-text-muted);" data-i18n="pastoral.privateNote">Esta solicitud no se muestra públicamente.</p>
       </form>
     </div></section>
   </main>

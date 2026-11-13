@@ -16,11 +16,13 @@
 <body>
   <main class="section" style="min-height:100vh;display:grid;place-items:center;text-align:center;">
     <div class="container" style="max-width:700px;">
-      <p class="eyebrow">404</p>
-      <h1>Página no encontrada</h1>
-      <p class="lead">Lo sentimos, no pudimos encontrar esa página. Pero nos encantaría ayudarte a llegar al lugar correcto.</p>
-      <p><a class="btn btn-primary" href="/">Ir al inicio</a> <a class="btn btn-secondary" href="/planifica-tu-visita/">Planifica tu visita</a></p>
+      <div style="display:flex;justify-content:flex-end;margin-bottom:1rem;"><button type="button" class="btn btn-secondary" id="langToggle" aria-label="Cambiar idioma / Switch language" style="padding:.45rem .8rem;">EN</button></div>
+      <p class="eyebrow" data-i18n="notFound.eyebrow">404</p>
+      <h1 data-i18n="notFound.title">Página no encontrada</h1>
+      <p class="lead" data-i18n="notFound.lead">Lo sentimos, no pudimos encontrar esa página. Pero nos encantaría ayudarte a llegar al lugar correcto.</p>
+      <p><a class="btn btn-primary" href="/" data-i18n="notFound.home">Ir al inicio</a> <a class="btn btn-secondary" href="/planifica-tu-visita/" data-i18n="home.ctaVisit">Planifica tu visita</a></p>
     </div>
   </main>
+  <script src="/assets/js/main.js" defer></script>
 </body>
 </html>

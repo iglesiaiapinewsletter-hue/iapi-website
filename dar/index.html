@@ -18,20 +18,20 @@
   <header class="site-header"><div class="container header-inner"><a class="brand" href="/"><img src="/assets/images/logo.png" alt="Logo de IAPI"><span>IAPI Irving</span></a><nav aria-label="Principal"><ul class="nav-links"><li><a href="/planifica-tu-visita/" data-i18n="nav.visit">Planifica tu visita</a></li><li><a href="/dar/" aria-current="page" data-i18n="nav.give">Dar</a></li><li><a href="/contacto/" data-i18n="nav.contact">Contacto</a></li></ul></nav></div></header>
   <main id="main" style="padding-top:var(--header-h);">
     <section class="section page-intro"><div class="container" style="max-width:800px;">
-      <p class="eyebrow">Dar</p>
-      <h1>Tu generosidad hace la diferencia</h1>
-      <p class="lead">Gracias por apoyar la obra de la iglesia. Actualmente recibimos ofrendas y diezmos por <strong>Zelle</strong>.</p>
+      <p class="eyebrow" data-i18n="give.eyebrow">Dar</p>
+      <h1 data-i18n="give.title">Tu generosidad hace la diferencia</h1>
+      <p class="lead" data-i18n-html="give.leadHtml">Gracias por apoyar la obra de la iglesia. Actualmente recibimos ofrendas y diezmos por <strong>Zelle</strong>.</p>
       <div class="card" style="margin-top:1.5rem;">
-        <h2 style="font-size:1.8rem;">Dar con Zelle</h2>
-        <p><strong>Enviar a (teléfono):</strong> <span id="zellePhone">(903) 998-0338</span> <button class="btn btn-secondary" type="button" data-copy="#zellePhone" style="margin-left:.5rem;padding:.4rem .8rem;">Copiar</button></p>
-        <p><strong>Nombre que aparece:</strong> <span id="zelleName">Iglesia Apostoles y Profetas USA en Irving</span> <button class="btn btn-secondary" type="button" data-copy="#zelleName" style="margin-left:.5rem;padding:.4rem .8rem;">Copiar</button></p>
+        <h2 style="font-size:1.8rem;" data-i18n="give.zelleTitle">Dar con Zelle</h2>
+        <p><strong data-i18n="give.sendToLabel">Enviar a (teléfono):</strong> <span id="zellePhone">(903) 998-0338</span> <button class="btn btn-secondary" type="button" data-copy="#zellePhone" style="margin-left:.5rem;padding:.4rem .8rem;" data-i18n="give.copy">Copiar</button></p>
+        <p><strong data-i18n="give.nameLabel">Nombre que aparece:</strong> <span id="zelleName">Iglesia Apostoles y Profetas USA en Irving</span> <button class="btn btn-secondary" type="button" data-copy="#zelleName" style="margin-left:.5rem;padding:.4rem .8rem;" data-i18n="give.copy">Copiar</button></p>
         <ol style="padding-left:1.2rem;color:var(--color-text-muted);">
-          <li>Abre tu app bancaria y selecciona <strong>Zelle</strong>.</li>
-          <li>Agrega el destinatario usando el número de teléfono indicado.</li>
-          <li>Verifica que el nombre mostrado sea el de la iglesia.</li>
-          <li>Ingresa el monto y una nota opcional (ej. "Ofrenda" o "Diezmo").</li>
+          <li data-i18n-html="give.step1Html">Abre tu app bancaria y selecciona <strong>Zelle</strong>.</li>
+          <li data-i18n="give.step2">Agrega el destinatario usando el número de teléfono indicado.</li>
+          <li data-i18n="give.step3">Verifica que el nombre mostrado sea el de la iglesia.</li>
+          <li data-i18n-html="give.step4Html">Ingresa el monto y una nota opcional (ej. "Ofrenda" o "Diezmo").</li>
         </ol>
-        <p style="font-size:.95rem;color:var(--color-text-muted);"><strong>Aviso:</strong> No recopilamos datos de pago en este sitio. Las ofrendas pueden ser deducibles de impuestos según corresponda; consulta a tu asesor fiscal. IAPI es una iglesia reconocida como 501(c)(3).</p>
+        <p style="font-size:.95rem;color:var(--color-text-muted);" data-i18n-html="give.noticeHtml"><strong>Aviso:</strong> No recopilamos datos de pago en este sitio. Las ofrendas pueden ser deducibles de impuestos según corresponda; consulta a tu asesor fiscal. IAPI es una iglesia reconocida como 501(c)(3).</p>
       </div>
     </div></section>
   </main>
@@ -54,7 +54,7 @@
     document.addEventListener('click', async (e) => {
       const b = e.target.closest('[data-copy]'); if(!b) return;
       const el = document.querySelector(b.getAttribute('data-copy')); if(!el) return;
-      try { await navigator.clipboard.writeText(el.textContent.trim()); const t=b.textContent; b.textContent='Copiado'; setTimeout(()=>b.textContent=t,1500); } catch(_){}
+      try { await navigator.clipboard.writeText(el.textContent.trim()); const t=b.textContent; b.textContent=(document.documentElement.lang==='en'?'Copied':'Copiado'); setTimeout(()=>b.textContent=t,1500); } catch(_){}
     });
   </script>
   <script src="/assets/js/main.js" defer></script>
