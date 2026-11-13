@@ -2,7 +2,7 @@ backend:
   name: github
   repo: iglesiaiapinewsletter-hue/iapi-website
   branch: main
-  base_url: https://YOUR-OAUTH-WORKER.example.com # TODO: Sveltia CMS Auth helper (Cloudflare Workers)
+  base_url: https://sveltia-cms-auth.storage-shared24-d9b.workers.dev
   auth_endpoint: /authorize
 
 media_folder: "assets/uploads"
