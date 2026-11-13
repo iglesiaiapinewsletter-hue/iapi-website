@@ -3,7 +3,7 @@ backend:
   repo: iglesiaiapinewsletter-hue/iapi-website
   branch: main
   base_url: https://sveltia-cms-auth.storage-shared24-d9b.workers.dev
-  auth_endpoint: /authorize
+  auth_endpoint: /auth
 
 media_folder: "assets/uploads"
 public_folder: "/assets/uploads"
