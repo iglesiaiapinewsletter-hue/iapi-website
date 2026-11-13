@@ -50,7 +50,7 @@
   </script>
 </head>
 <body>
-  <a class="skip-link" href="#main">Saltar al contenido / Skip to content</a>
+  <a class="skip-link" href="#main" data-i18n="common.skipToContent">Saltar al contenido</a>
 
   <header class="site-header">
     <div class="container header-inner">
@@ -60,12 +60,12 @@
       </a>
       <nav aria-label="Principal">
         <ul class="nav-links">
-          <li><a href="/planifica-tu-visita/">Planifica tu visita</a></li>
-          <li><a href="/nosotros/">Nosotros</a></li>
-          <li><a href="/ministerios/">Ministerios</a></li>
-          <li><a href="/ver/">Ver</a></li>
-          <li><a href="/eventos/">Eventos</a></li>
-          <li><a href="/contacto/">Contacto</a></li>
+          <li><a href="/planifica-tu-visita/" data-i18n="nav.visit">Planifica tu visita</a></li>
+          <li><a href="/nosotros/" data-i18n="nav.about">Nosotros</a></li>
+          <li><a href="/ministerios/" data-i18n="nav.ministries">Ministerios</a></li>
+          <li><a href="/ver/" data-i18n="nav.watch">Ver</a></li>
+          <li><a href="/eventos/" data-i18n="nav.events">Eventos</a></li>
+          <li><a href="/contacto/" data-i18n="nav.contact">Contacto</a></li>
         </ul>
       </nav>
       <div class="header-actions">
@@ -76,16 +76,16 @@
     </div>
     <nav id="mobileNav" class="mobile-nav" aria-label="Menú móvil">
       <div class="container">
-        <a href="/">Inicio</a>
-        <a href="/planifica-tu-visita/">Planifica tu visita</a>
-        <a href="/nosotros/">Nosotros</a>
-        <a href="/ministerios/">Ministerios</a>
-        <a href="/ver/">Ver</a>
-        <a href="/eventos/">Eventos</a>
-        <a href="/anuncios/">Anuncios</a>
-        <a href="/dar/">Dar</a>
-        <a href="/oracion/">Oración</a>
-        <a href="/contacto/">Contacto</a>
+        <a href="/" data-i18n="nav.home">Inicio</a>
+        <a href="/planifica-tu-visita/" data-i18n="nav.visit">Planifica tu visita</a>
+        <a href="/nosotros/" data-i18n="nav.about">Nosotros</a>
+        <a href="/ministerios/" data-i18n="nav.ministries">Ministerios</a>
+        <a href="/ver/" data-i18n="nav.watch">Ver</a>
+        <a href="/eventos/" data-i18n="nav.events">Eventos</a>
+        <a href="/anuncios/" data-i18n="nav.announcements">Anuncios</a>
+        <a href="/dar/" data-i18n="nav.give">Dar</a>
+        <a href="/oracion/" data-i18n="nav.prayer">Oración</a>
+        <a href="/contacto/" data-i18n="nav.contact">Contacto</a>
       </div>
     </nav>
   </header>
@@ -94,24 +94,24 @@
     <section class="hero" aria-label="Bienvenida">
       <div class="hero-bg" aria-hidden="true"></div>
       <div class="container hero-content">
-        <p class="hero-kicker">Iglesia Apóstoles y Profetas Irving</p>
-        <h1><span>Bienvenido</span><span>a casa</span></h1>
-        <p class="tagline">¡Proclamando el señorío de Cristo y reuniéndonos en adoración, oración y la Palabra!</p>
+        <p class="hero-kicker" data-i18n="home.heroKicker">Iglesia Apóstoles y Profetas Irving</p>
+        <h1><span data-i18n="home.heroTitle1">Bienvenido</span><span data-i18n="home.heroTitle2">a casa</span></h1>
+        <p class="tagline" data-i18n="home.heroSubtitle">¡Proclamando el señorío de Cristo y reuniéndonos en adoración, oración y la Palabra!</p>
         <div class="hero-ctas">
-          <a class="btn btn-primary" href="/planifica-tu-visita/">Planifica tu visita</a>
-          <a class="btn btn-secondary" href="/ver/">Ver en vivo</a>
+          <a class="btn btn-primary" href="/planifica-tu-visita/" data-i18n="home.ctaVisit">Planifica tu visita</a>
+          <a class="btn btn-secondary" href="/ver/" data-i18n="home.ctaWatch">Ver en vivo</a>
         </div>
         <div class="service-strip" aria-label="Horarios de servicios">
-          <div><strong>Domingo</strong><span>11:00 AM · Culto de Enseñanza</span></div>
-          <div><strong>Miércoles</strong><span>7:30 PM · Culto de Oración</span></div>
-          <div><strong>Viernes</strong><span>7:30 PM · Culto de Exaltación</span></div>
+          <div><strong data-i18n="home.serviceSunday">Domingo</strong><span data-i18n="home.serviceSundayDesc">11:00 AM · Culto de Enseñanza</span></div>
+          <div><strong data-i18n="home.serviceWednesday">Miércoles</strong><span data-i18n="home.serviceWednesdayDesc">7:30 PM · Culto de Oración</span></div>
+          <div><strong data-i18n="home.serviceFriday">Viernes</strong><span data-i18n="home.serviceFridayDesc">7:30 PM · Culto de Exaltación</span></div>
         </div>
         <div class="grid" style="margin-top:1.5rem;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));max-width:900px;">
           <div id="nextService" class="card" style="background:rgba(255,255,255,.08);"></div>
           <div id="nextSpecialSunday" class="card" style="background:rgba(255,255,255,.08);"></div>
         </div>
         <div class="card" style="margin-top:1rem;max-width:900px;background:rgba(184,136,40,.12);border-color:rgba(184,136,40,.3);">
-          <strong>Evento esta semana:</strong> Estudio Bíblico: Las 10 Plagas en Egipto – ¿Quién es Jehová? · 6–15 nov 2026 · <a href="/eventos/">Ver detalles</a>
+          <strong data-i18n="home.eventWeekLabel">Evento esta semana:</strong> Estudio Bíblico: Las 10 Plagas en Egipto – ¿Quién es Jehová? · 6–15 nov 2026 · <a href="/eventos/" data-i18n="home.eventWeekLink">Ver detalles</a>
         </div>
       </div>
     </section>
@@ -122,14 +122,14 @@
           <img src="/assets/images/pastor-800.webp" srcset="/assets/images/pastor-480.webp 480w, /assets/images/pastor-800.webp 800w, /assets/images/pastor-1200.webp 1200w" sizes="(max-width: 900px) 100vw, 420px" alt="Pastor Oscar Amílcar Guevara" loading="lazy" width="800" height="533">
         </div>
         <div class="about-showcase-copy">
-          <p class="eyebrow">Quiénes somos</p>
-          <h2>Una familia para adorar juntos</h2>
-          <p class="lead">Somos una iglesia en Irving, Texas, donde puedes acercarte a Dios en adoración, oración y la Palabra. Nos alegra recibirte tal como eres.</p>
+          <p class="eyebrow" data-i18n="home.whoWeAreEyebrow">Quiénes somos</p>
+          <h2 data-i18n="home.whoWeAreTitle">Una familia para adorar juntos</h2>
+          <p class="lead" data-i18n="home.whoWeAreLead">Somos una iglesia en Irving, Texas, donde puedes acercarte a Dios en adoración, oración y la Palabra. Nos alegra recibirte tal como eres.</p>
           <div class="about-highlight card">
-            <p style="margin:0;color:#fff;font-size:1.05rem;"><strong>Pastor Oscar Amílcar Guevara</strong></p>
-            <p style="margin:.35rem 0 0;">Al final del mensaje, el pastor da la bienvenida personalmente a los visitantes y puedes saludarlo después del servicio.</p>
+            <p style="margin:0;color:#fff;font-size:1.05rem;"><strong data-i18n="home.pastorName">Pastor Oscar Amílcar Guevara</strong></p>
+            <p style="margin:.35rem 0 0;" data-i18n="home.pastorWelcome">Al final del mensaje, el pastor da la bienvenida personalmente a los visitantes y puedes saludarlo después del servicio.</p>
           </div>
-          <p style="display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.25rem;"><a class="btn btn-primary" href="/nosotros/">Conócenos</a><a class="btn btn-secondary" href="/planifica-tu-visita/">Planifica tu visita</a></p>
+          <p style="display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1.25rem;"><a class="btn btn-primary" href="/nosotros/" data-i18n="home.aboutCta">Conócenos</a><a class="btn btn-secondary" href="/planifica-tu-visita/" data-i18n="home.ctaVisit">Planifica tu visita</a></p>
         </div>
         <div class="about-showcase-side" aria-hidden="true"></div>
       </div>
@@ -137,42 +137,42 @@
 
     <section class="section section-image">
       <div class="container">
-        <p class="eyebrow">Qué esperar</p>
-        <h2>Tu primera visita</h2>
-        <p class="lead" style="max-width:60ch;">Queremos que te sientas en casa desde el primer momento. Aquí sabes qué esperar cuando nos visites.</p>
+        <p class="eyebrow" data-i18n="home.whatToExpectEyebrow">Qué esperar</p>
+        <h2 data-i18n="home.whatToExpectTitle">Tu primera visita</h2>
+        <p class="lead" style="max-width:60ch;" data-i18n="home.whatToExpectLead">Queremos que te sientas en casa desde el primer momento. Aquí sabes qué esperar cuando nos visites.</p>
         <div class="grid grid-3" style="margin-top:1.5rem;">
           <div class="card">
-            <h3>Adoración y Palabra</h3>
-            <p>Un tiempo de alabanza, predicación y oración. El servicio dominical suele durar alrededor de 2 horas.</p>
+            <h3 data-i18n="home.expect1Title">Adoración y Palabra</h3>
+            <p data-i18n="home.expect1Text">Un tiempo de alabanza, predicación y oración. El servicio dominical suele durar alrededor de 2 horas.</p>
           </div>
           <div class="card">
-            <h3>Bienvenida personal</h3>
-            <p>Al final del mensaje, el pastor da la bienvenida personalmente a los visitantes, y puedes saludarlo después del servicio.</p>
+            <h3 data-i18n="home.expect2Title">Bienvenida personal</h3>
+            <p data-i18n="home.expect2Text">Al final del mensaje, el pastor da la bienvenida personalmente a los visitantes, y puedes saludarlo después del servicio.</p>
           </div>
           <div class="card">
-            <h3>Niños y jóvenes</h3>
-            <p>Ministerio de niños (3–10) los domingos durante el mensaje, y participación/reunión de jóvenes cada 3er domingo.</p>
+            <h3 data-i18n="home.expect3Title">Niños y jóvenes</h3>
+            <p data-i18n="home.expect3Text">Ministerio de niños (3–10) los domingos durante el mensaje, y participación/reunión de jóvenes cada 3er domingo.</p>
           </div>
         </div>
-        <p style="margin-top:1.5rem;"><a class="btn btn-primary" href="/planifica-tu-visita/">Planifica tu visita</a></p>
+        <p style="margin-top:1.5rem;"><a class="btn btn-primary" href="/planifica-tu-visita/" data-i18n="home.ctaVisit">Planifica tu visita</a></p>
       </div>
     </section>
 
     <section class="section section-alt">
       <div class="container">
         <div class="card" style="margin-bottom:1.5rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;align-items:center;">
-          <div><p class="eyebrow" style="margin-bottom:.2rem;">¿Primera vez?</p><h3 style="margin:0;font-size:1.5rem;">Todo lo que necesitas</h3></div>
-          <a class="btn btn-primary" href="/planifica-tu-visita/">Planifica tu visita</a>
-          <a class="btn btn-secondary" href="https://www.google.com/maps/dir/?api=1&destination=530+N+O%27Connor+Rd%2C+Irving%2C+TX+75061" target="_blank" rel="noopener">Cómo llegar</a>
-          <a class="btn btn-secondary" href="tel:+19039980338">Llamar</a>
+          <div><p class="eyebrow" style="margin-bottom:.2rem;" data-i18n="home.firstTimeEyebrow">¿Primera vez?</p><h3 style="margin:0;font-size:1.5rem;" data-i18n="home.firstTimeTitle">Todo lo que necesitas</h3></div>
+          <a class="btn btn-primary" href="/planifica-tu-visita/" data-i18n="home.ctaVisit">Planifica tu visita</a>
+          <a class="btn btn-secondary" href="https://www.google.com/maps/dir/?api=1&destination=530+N+O%27Connor+Rd%2C+Irving%2C+TX+75061" target="_blank" rel="noopener" data-i18n="common.directions">Cómo llegar</a>
+          <a class="btn btn-secondary" href="tel:+19039980338" data-i18n="common.call">Llamar</a>
         </div>
         <div style="display:flex;justify-content:space-between;gap:1rem;align-items:end;flex-wrap:wrap;margin-bottom:1.25rem;">
-          <div><p class="eyebrow">Vida en la iglesia</p><h2>Conéctate esta semana</h2></div>
-          <a class="btn btn-secondary" href="/eventos/">Ver todos los eventos</a>
+          <div><p class="eyebrow" data-i18n="home.connectEyebrow">Vida en la iglesia</p><h2 data-i18n="home.connectTitle">Conéctate esta semana</h2></div>
+          <a class="btn btn-secondary" href="/eventos/" data-i18n="home.seeAllEvents">Ver todos los eventos</a>
         </div>
         <div class="grid grid-3">
           <div class="card" id="latestSermon"><p class="eyebrow">Último mensaje</p><p><a href="https://www.youtube.com/aypirving" target="_blank" rel="noopener">Ver canal de YouTube</a></p></div>
-          <div class="card" id="homeEvents"><p class="eyebrow">Eventos</p><p><strong>Estudio Bíblico: Las 10 Plagas en Egipto – ¿Quién es Jehová?</strong><br><span style="color:var(--color-text-muted);font-size:.95rem;">2026-11-06 al 2026-11-15 · Noches 7:30 PM | Domingos 11:00 AM</span></p><p><a href="/eventos/">Ver todos</a></p></div>
+          <div class="card" id="homeEvents"><p class="eyebrow">Eventos</p><p><strong>Estudio Bíblico: Las 10 Plagas en Egipto – ¿Quién es Jehová?</strong><br><span style="color:var(--color-text-muted);font-size:.95rem;">2026-11-06 al 2026-11-15 · Noches 7:30 PM | Domingos 11:00 AM</span></p><p><a href="/eventos/" data-i18n="nav.events">Ver todos</a></p></div>
           <div class="card" id="verseOfWeek"><p class="eyebrow">Versículo de la semana</p><blockquote style="margin:0;font-size:1.2rem;line-height:1.5;">“¡Mirad cuán bueno y cuán delicioso es habitar los hermanos juntos en armonía!”</blockquote><p style="margin-top:.5rem;color:var(--color-text-muted);"><strong>Salmos 133:1</strong></p></div>
         </div>
       </div>
@@ -181,23 +181,23 @@
     <section class="section">
       <div class="container split">
         <div>
-          <p class="eyebrow">Ubicación</p>
-          <h2>Te esperamos en Irving</h2>
-          <p>530 N O'Connor Rd, Irving, TX 75061 · Estacionamiento gratis · <a href="tel:+19039980338">(903) 998-0338</a></p>
-          <p><a class="btn btn-primary" href="https://www.google.com/maps/dir/?api=1&destination=530+N+O%27Connor+Rd%2C+Irving%2C+TX+75061" target="_blank" rel="noopener">Cómo llegar</a></p>
+          <p class="eyebrow" data-i18n="home.locationEyebrow">Ubicación</p>
+          <h2 data-i18n="home.locationTitle">Te esperamos en Irving</h2>
+          <p><span data-i18n="home.locationText">530 N O'Connor Rd, Irving, TX 75061 · Estacionamiento gratis ·</span> <a href="tel:+19039980338">(903) 998-0338</a></p>
+          <p><a class="btn btn-primary" href="https://www.google.com/maps/dir/?api=1&destination=530+N+O%27Connor+Rd%2C+Irving%2C+TX+75061" target="_blank" rel="noopener" data-i18n="common.directions">Cómo llegar</a></p>
         </div>
         <div class="card">
-          <p class="eyebrow">Boletín</p>
-          <h3>Recibe noticias de la iglesia</h3>
-          <p style="color:var(--color-text-muted);">Suscríbete para recibir información y anuncios (en español).</p>
+          <p class="eyebrow" data-i18n="home.newsletterEyebrow">Boletín</p>
+          <h3 data-i18n="home.newsletterTitle">Recibe noticias de la iglesia</h3>
+          <p style="color:var(--color-text-muted);" data-i18n="home.newsletterText">Suscríbete para recibir información y anuncios (en español).</p>
           <form name="newsletter" method="POST" data-netlify="true" netlify-honeypot="bot-field">
             <input type="hidden" name="form-name" value="newsletter">
             <p style="display:none;"><label>No llenar: <input name="bot-field"></label></p>
-            <label>Correo electrónico<br><input type="email" name="email" required style="width:100%;padding:.7rem;border-radius:10px;border:1px solid var(--color-border);background:rgba(255,255,255,.04);color:#fff;"></label>
-            <label style="display:block;margin-top:.7rem;font-size:.95rem;color:var(--color-text-muted);"><input type="checkbox" name="consent" required> Acepto recibir correos de IAPI y entiendo que puedo cancelar en cualquier momento.</label>
-            <p style="margin-top:.8rem;"><button class="btn btn-primary" type="submit">Suscribirme</button></p>
+            <label><span data-i18n="home.newsletterEmail">Correo electrónico</span><br><input type="email" name="email" required style="width:100%;padding:.7rem;border-radius:10px;border:1px solid var(--color-border);background:rgba(255,255,255,.04);color:#fff;"></label>
+            <label style="display:block;margin-top:.7rem;font-size:.95rem;color:var(--color-text-muted);"><input type="checkbox" name="consent" required> <span data-i18n="home.newsletterConsent">Acepto recibir correos de IAPI y entiendo que puedo cancelar en cualquier momento.</span></label>
+            <p style="margin-top:.8rem;"><button class="btn btn-primary" type="submit" data-i18n="home.newsletterSubmit">Suscribirme</button></p>
           </form>
-          <p style="font-size:.9rem;color:var(--color-text-muted);margin-bottom:0;">Conecta este formulario a tu servicio de correo (EmailOctopus/Brevo) en Netlify/automatización.</p>
+          <p style="font-size:.9rem;color:var(--color-text-muted);margin-bottom:0;" data-i18n="home.newsletterNote">Conecta este formulario a tu servicio de correo (EmailOctopus/Brevo) en Netlify/automatización.</p>
         </div>
       </div>
     </section>
@@ -206,7 +206,7 @@
     <p><strong>Iglesia Apóstoles y Profetas Irving (IAPI)</strong></p>
     <p>530 N O'Connor Rd, Irving, TX 75061 · <a href="tel:+19039980338">(903) 998-0338</a></p>
     <div class="footer-social" aria-label="Redes sociales">
-      <p style="margin:.75rem 0 .35rem;font-size:.95rem;">Síguenos</p>
+      <p style="margin:.75rem 0 .35rem;font-size:.95rem;" data-i18n="common.followUs">Síguenos</p>
       <div class="social-links">
         <a class="social-link" href="https://www.youtube.com/aypirving" target="_blank" rel="noopener" aria-label="YouTube"><img src="/assets/images/social-youtube.svg" alt=""></a>
         <a class="social-link" href="https://www.facebook.com/apostolesyprofetasirving" target="_blank" rel="noopener" aria-label="Facebook"><img src="/assets/images/social-facebook.svg" alt=""></a>
@@ -214,13 +214,13 @@
         <a class="social-link" href="https://www.tiktok.com/@iglesiaiapi" target="_blank" rel="noopener" aria-label="TikTok"><img src="/assets/images/social-tiktok.svg" alt=""></a>
       </div>
     </div>
-    <p style="margin-top:.75rem;font-size:.95rem;"><a href="/privacidad/">Privacidad</a> · <a href="/terminos/">Términos</a> · <a href="/cookies/">Cookies</a> · <a href="/accesibilidad/">Accesibilidad</a> · <a href="#cookie-settings">Configuración de cookies</a></p>
+    <p style="margin-top:.75rem;font-size:.95rem;"><a href="/privacidad/" data-i18n="footer.privacy">Privacidad</a> · <a href="/terminos/" data-i18n="footer.terms">Términos</a> · <a href="/cookies/" data-i18n="footer.cookies">Cookies</a> · <a href="/accesibilidad/" data-i18n="footer.accessibility">Accesibilidad</a> · <a href="#cookie-settings" data-i18n="footer.cookieSettings">Configuración de cookies</a></p>
     <p style="font-size:.95rem;">© 2026 Iglesia Apostoles y Profetas USA en Irving.</p>
   </div></footer>
 
-  <div class="mobile-bar" aria-label="Acciones rápidas">
-    <a class="btn btn-primary" href="https://www.google.com/maps/dir/?api=1&destination=530+N+O%27Connor+Rd%2C+Irving%2C+TX+75061" target="_blank" rel="noopener">Cómo llegar</a>
-    <a class="btn btn-primary" href="tel:+19039980338">Llamar</a>
+  <div class="mobile-bar" aria-label="Acciones rápidas" data-i18n-aria="common.quickActions">
+    <a class="btn btn-primary" href="https://www.google.com/maps/dir/?api=1&destination=530+N+O%27Connor+Rd%2C+Irving%2C+TX+75061" target="_blank" rel="noopener" data-i18n="common.directions">Cómo llegar</a>
+    <a class="btn btn-primary" href="tel:+19039980338" data-i18n="common.call">Llamar</a>
   </div>
 
   <script src="/assets/js/main.js" defer></script>

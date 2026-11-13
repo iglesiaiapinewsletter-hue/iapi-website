@@ -18,7 +18,7 @@
 - [x] Proposed and received approval for fonts and sitemap.
 
 ## Build / functional gaps (ongoing)
-- [ ] Complete full bilingual content/i18n wiring across all pages and remember language consistently. (2026-11-13: added `main.js` support to apply translations for `data-i18n*` elements; pages/content still need keys and translated copy.)
+- [ ] Complete full bilingual content/i18n wiring across all pages and remember language consistently. (2026-11-13: added `main.js` `data-i18n*` support + language-aware injected/shared chrome and dynamic home blocks; added shared nav/footer/skip keys across pages and wired much of Home `index.html`; still need full per-page content keys/copy and dynamic/page scripts.)
 - [x] SEO basics (partial): absolute canonical URLs on public pages; `robots.txt` and `sitemap.xml` updated with absolute test-site URLs (2026-11-13). Re-run Lighthouse/SEO after deploy.
 - [x] Social/redes links: added black SVG icon assets and social links in site footers and contact page (2026-11-13).
 - [ ] Continue responsive/layout polish to ensure no text overlap at any viewport size (global safeguards added 2026-11-13; needs QA across pages).

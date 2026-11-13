@@ -3,6 +3,77 @@
   const LANG_KEY = 'iapi-lang';
   const CONSENT_KEY = 'iapi-consent';
 
+  let i18nCache = {};
+  let siteCache = null;
+
+  function getLang() {
+    return document.documentElement.lang === 'en' ? 'en' : 'es';
+  }
+
+  async function loadI18n(lang) {
+    lang = lang || getLang();
+    if (i18nCache[lang]) return i18nCache[lang];
+    try {
+      const r = await fetch('/content/i18n/' + lang + '.json', { cache: 'no-store' });
+      if (!r.ok) throw new Error('i18n');
+      i18nCache[lang] = await r.json();
+      return i18nCache[lang];
+    } catch { return null; }
+  }
+
+  function getByPath(obj, path) {
+    return path && obj ? path.split('.').reduce((o, k) => (o && o[k] != null ? o[k] : null), obj) : null;
+  }
+
+  async function t(path, fallback) {
+    const dict = await loadI18n(getLang());
+    const v = getByPath(dict, path);
+    return (typeof v === 'string') ? v : (fallback || '');
+  }
+
+  async function loadSite() {
+    if (siteCache) return siteCache;
+    try {
+      const r = await fetch('/content/site.json', { cache: 'no-store' });
+      siteCache = await r.json();
+      return siteCache;
+    } catch { return null; }
+  }
+
+  async function applyTranslations(lang) {
+    lang = lang || getLang();
+    const dict = await loadI18n(lang);
+    if (!dict) return;
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      const val = getByPath(dict, key);
+      if (typeof val === 'string') el.textContent = val;
+    });
+    document.querySelectorAll('[data-i18n-html]').forEach(el => {
+      const key = el.getAttribute('data-i18n-html');
+      const val = getByPath(dict, key);
+      if (typeof val === 'string') el.innerHTML = val;
+    });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+      const key = el.getAttribute('data-i18n-placeholder');
+      const val = getByPath(dict, key);
+      if (typeof val === 'string') el.setAttribute('placeholder', val);
+    });
+    document.querySelectorAll('[data-i18n-aria]').forEach(el => {
+      const key = el.getAttribute('data-i18n-aria');
+      const val = getByPath(dict, key);
+      if (typeof val === 'string') el.setAttribute('aria-label', val);
+    });
+  }
+
+  async function refreshDynamicContent() {
+    await applyTranslations(getLang());
+    renderLiveBanner();
+    renderNextSpecialSunday();
+    renderNextService();
+    renderHomeExtras();
+  }
+
   function getConsent() {
     try { return JSON.parse(localStorage.getItem(CONSENT_KEY) || 'null'); } catch { return null; }
   }
@@ -39,57 +110,17 @@
     if (consent) wrap.style.display = 'none';
   }
 
-  let i18nCache = {};
-  async function loadI18n(lang) {
-    if (!lang) lang = document.documentElement.lang || 'es';
-    if (i18nCache[lang]) return i18nCache[lang];
-    try {
-      const r = await fetch('/content/i18n/' + lang + '.json', { cache: 'no-store' });
-      if (!r.ok) throw new Error('i18n');
-      i18nCache[lang] = await r.json();
-      return i18nCache[lang];
-    } catch { return null; }
-  }
-  function getByPath(obj, path) {
-    return path.split('.').reduce((o, k) => (o && o[k] != null ? o[k] : null), obj);
-  }
-  async function applyTranslations(lang) {
-    lang = lang || document.documentElement.lang || 'es';
-    const dict = await loadI18n(lang);
-    if (!dict) return;
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-      const key = el.getAttribute('data-i18n');
-      const val = getByPath(dict, key);
-      if (typeof val === 'string') el.textContent = val;
-    });
-    document.querySelectorAll('[data-i18n-html]').forEach(el => {
-      const key = el.getAttribute('data-i18n-html');
-      const val = getByPath(dict, key);
-      if (typeof val === 'string') el.innerHTML = val;
-    });
-    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-      const key = el.getAttribute('data-i18n-placeholder');
-      const val = getByPath(dict, key);
-      if (typeof val === 'string') el.setAttribute('placeholder', val);
-    });
-    document.querySelectorAll('[data-i18n-aria]').forEach(el => {
-      const key = el.getAttribute('data-i18n-aria');
-      const val = getByPath(dict, key);
-      if (typeof val === 'string') el.setAttribute('aria-label', val);
-    });
-  }
-
   function setupLangToggle() {
     const btn = document.getElementById('langToggle');
     async function setLang(lang) {
       document.documentElement.lang = lang;
       if (btn) btn.textContent = lang === 'en' ? 'ES' : 'EN';
       try { localStorage.setItem(LANG_KEY, lang); } catch (e) {}
-      await applyTranslations(lang);
+      await refreshDynamicContent();
     }
     if (btn) {
       btn.addEventListener('click', function () {
-        const isEs = document.documentElement.lang === 'es';
+        const isEs = getLang() === 'es';
         setLang(isEs ? 'en' : 'es');
       });
     }
@@ -100,7 +131,6 @@
         if (btn) btn.textContent = saved === 'en' ? 'ES' : 'EN';
       }
     } catch (e) {}
-    applyTranslations(document.documentElement.lang || 'es');
   }
 
   function computeNextSpecialSunday() {
@@ -114,37 +144,23 @@
       const first = new Date(y, m, 1);
       const offset = (7 - first.getDay()) % 7; // Sunday=0
       const firstSunday = new Date(y, m, 1 + offset);
-      // If this month's first Sunday has passed (end of day), move on
       const endOfDay = new Date(firstSunday); endOfDay.setHours(23,59,59,999);
       if (endOfDay >= tzNow) {
-        // Months since 2026-10 (Nov 2026 index) where Nov 2026 => Santa Cena
         const monthsSinceNov2026 = (y - 2026) * 12 + (m - 10);
         const isSantaCena = (monthsSinceNov2026 % 2 === 0);
-        return {
-          date: firstSunday,
-          type: isSantaCena ? 'Santa Cena' : 'Ayuno',
-          detail: isSantaCena ? 'Durante el servicio de 11:00 AM' : 'Aproximadamente 9:00 AM – 5:00 PM'
-        };
+        return { date: firstSunday, isSantaCena };
       }
       m++; if (m > 11) { m = 0; y++; }
     }
     return null;
   }
 
-  function renderNextSpecialSunday() {
-    const el = document.getElementById('nextSpecialSunday');
-    if (!el) return;
-    const next = computeNextSpecialSunday();
-    if (!next) return;
-    const dateStr = next.date.toLocaleDateString('es-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'America/Chicago' });
-    el.innerHTML = `<strong>Próximo primer domingo especial:</strong> ${next.type} · ${dateStr}<br><span style="color:var(--color-text-muted)">${next.detail}</span>`;
-  }
-
+  let nextServiceTimer = null;
   function getNextService() {
     const schedule = [
-      { day: 0, hour: 11, minute: 0, label: 'Domingo 11:00 AM · Culto de Enseñanza' },
-      { day: 3, hour: 19, minute: 30, label: 'Miércoles 7:30 PM · Culto de Oración' },
-      { day: 5, hour: 19, minute: 30, label: 'Viernes 7:30 PM · Culto de Exaltación' }
+      { day: 0, hour: 11, minute: 0, label_es: 'Domingo 11:00 AM · Culto de Enseñanza', label_en: 'Sunday 11:00 AM · Teaching Service' },
+      { day: 3, hour: 19, minute: 30, label_es: 'Miércoles 7:30 PM · Culto de Oración', label_en: 'Wednesday 7:30 PM · Prayer Service' },
+      { day: 5, hour: 19, minute: 30, label_es: 'Viernes 7:30 PM · Culto de Exaltación', label_en: 'Friday 7:30 PM · Worship Service' }
     ];
     const now = new Date();
     const tzNow = new Date(now.toLocaleString('en-US', { timeZone: 'America/Chicago' }));
@@ -153,18 +169,38 @@
       for (const s of schedule) {
         if (d.getDay() !== s.day) continue;
         const candidate = new Date(d); candidate.setHours(s.hour, s.minute, 0, 0);
-        if (candidate > tzNow) return { date: candidate, label: s.label };
+        if (candidate > tzNow) return { date: candidate, label: getLang() === 'en' ? s.label_en : s.label_es };
       }
     }
     return null;
   }
 
-  function renderNextService() {
+  async function renderNextSpecialSunday() {
+    const el = document.getElementById('nextSpecialSunday');
+    if (!el) return;
+    const next = computeNextSpecialSunday();
+    if (!next) return;
+    const lang = getLang();
+    const dict = await loadI18n(lang);
+    const d = dict && dict.dynamic ? dict.dynamic : {};
+    const type = next.isSantaCena ? (d.santaCena || (lang==='en'?'Communion':'Santa Cena')) : (d.ayuno || (lang==='en'?'Fasting':'Ayuno'));
+    const detail = next.isSantaCena ? (d.santaCenaDetail || '') : (d.ayunoDetail || '');
+    const label = d.nextSpecialSunday || (lang==='en'?'Next special first Sunday:':'Próximo primer domingo especial:');
+    const dateStr = next.date.toLocaleDateString(lang === 'en' ? 'en-US' : 'es-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'America/Chicago' });
+    el.innerHTML = `<strong>${label}</strong> ${type} · ${dateStr}<br><span style="color:var(--color-text-muted)">${detail}</span>`;
+  }
+
+  async function renderNextService() {
     const el = document.getElementById('nextService');
     if (!el) return;
-    function tick() {
+    async function tick() {
       const next = getNextService();
       if (!next) return;
+      const lang = getLang();
+      const dict = await loadI18n(lang);
+      const d = dict && dict.dynamic ? dict.dynamic : {};
+      const label = d.nextService || (lang==='en'?'Next service:':'Próximo servicio:');
+      const starts = d.startsIn || (lang==='en'?'Starts in':'Comienza en');
       const diff = next.date - new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Chicago' }));
       const totalMin = Math.max(0, Math.floor(diff / 60000));
       const days = Math.floor(totalMin / (60*24));
@@ -173,44 +209,61 @@
       const parts = [];
       if (days) parts.push(days + 'd');
       parts.push(hours + 'h', mins + 'm');
-      el.innerHTML = `<strong>Próximo servicio:</strong> ${next.label}<br><span style="color:var(--color-text-muted)">Comienza en ${parts.join(' ')}</span>`;
+      el.innerHTML = `<strong>${label}</strong> ${next.label}<br><span style="color:var(--color-text-muted)">${starts} ${parts.join(' ')}</span>`;
     }
-    tick();
-    setInterval(tick, 60000);
+    await tick();
+    if (nextServiceTimer) clearInterval(nextServiceTimer);
+    nextServiceTimer = setInterval(tick, 60000);
   }
 
   async function renderHomeExtras() {
+    const lang = getLang();
+    const dict = await loadI18n(lang);
+    const site = await loadSite();
     // Verse of week
     const verseEl = document.getElementById('verseOfWeek');
     if (verseEl) {
       try {
-        const r = await fetch('/content/site.json'); const site = await r.json();
-        const v = site.verseOfWeek || {};
-        verseEl.innerHTML = `<p class="eyebrow">Versículo de la semana</p><blockquote style="margin:0;font-size:1.25rem;line-height:1.5;">“${v.text_es || ''}”</blockquote><p style="margin-top:.5rem;color:var(--color-text-muted);"><strong>${v.ref_es || ''}</strong></p>`;
+        const v = (site && site.verseOfWeek) ? site.verseOfWeek : {};
+        const text = lang === 'en' ? (v.text_en || v.text_es || '') : (v.text_es || v.text_en || '');
+        const ref = lang === 'en' ? (v.ref_en || v.ref_es || '') : (v.ref_es || v.ref_en || '');
+        const label = (dict && dict.dynamic && dict.dynamic.verseOfWeek) || (lang==='en'?'Verse of the week':'Versículo de la semana');
+        if (text || ref) {
+          verseEl.innerHTML = `<p class="eyebrow">${label}</p><blockquote style="margin:0;font-size:1.2rem;line-height:1.5;">“${text}”</blockquote><p style="margin-top:.5rem;color:var(--color-text-muted);"><strong>${ref}</strong></p>`;
+        }
       } catch {}
     }
     // Latest sermon
     const sermonEl = document.getElementById('latestSermon');
     if (sermonEl) {
+      const lm = (dict && dict.dynamic && dict.dynamic.latestMessage) || (lang==='en'?'Latest message':'Último mensaje');
+      const viewMsg = (dict && dict.home && dict.home.viewMessage) || (lang==='en'?'Watch message':'Ver mensaje');
+      const viewChan = (dict && dict.home && dict.home.viewYouTubeChannel) || (lang==='en'?'View YouTube channel':'Ver canal de YouTube');
       try {
         const r = await fetch('/.netlify/functions/sermons'); if(!r.ok) throw new Error();
         const d = await r.json(); const item = (d.items||[])[0];
-        if (item) sermonEl.innerHTML = `<p class="eyebrow">Último mensaje</p><h3 style="font-size:1.6rem;">${item.title}</h3><p><a class="btn btn-secondary" href="${item.link}" target="_blank" rel="noopener">Ver mensaje</a></p>`;
+        if (item) sermonEl.innerHTML = `<p class="eyebrow">${lm}</p><h3 style="font-size:1.6rem;">${item.title}</h3><p><a class="btn btn-secondary" href="${item.link}" target="_blank" rel="noopener">${viewMsg}</a></p>`;
         else throw new Error();
       } catch {
-        sermonEl.innerHTML = `<p class="eyebrow">Último mensaje</p><p><a href="https://www.youtube.com/aypirving" target="_blank" rel="noopener">Ver canal de YouTube</a></p>`;
+        sermonEl.innerHTML = `<p class="eyebrow">${lm}</p><p><a href="https://www.youtube.com/aypirving" target="_blank" rel="noopener">${viewChan}</a></p>`;
       }
     }
     // Upcoming events
     const eventsEl = document.getElementById('homeEvents');
     if (eventsEl) {
+      const evLabel = (dict && dict.dynamic && dict.dynamic.events) || (lang==='en'?'Events':'Eventos');
+      const seeAll = (dict && dict.home && dict.home.viewAll) || (dict && dict.common && dict.common.seeAll) || (lang==='en'?'View all':'Ver todos');
+      const soon = (dict && dict.dynamic && dict.dynamic.comingSoon) || (lang==='en'?'Coming soon':'Próximamente');
       try {
         const r = await fetch('/content/events.json', { cache: 'no-store' }); const d = await r.json();
         const items = (d.events||[]).slice(0,3);
-        if (!items.length) eventsEl.innerHTML = `<p class="eyebrow">Eventos</p><h3>Próximamente</h3><p><a href="/eventos/">Ver eventos</a></p>`;
-        else eventsEl.innerHTML = `<p class="eyebrow">Eventos</p>` + items.map(ev=>`<div style="margin:.6rem 0;"><strong>${ev.title_es||ev.title||''}</strong><div style="color:var(--color-text-muted);font-size:.95rem;">${ev.date||''}${ev.time?(' · '+ev.time):''}</div></div>`).join('') + `<p style="margin-top:.5rem;"><a href="/eventos/">Ver todos</a></p>`;
+        if (!items.length) eventsEl.innerHTML = `<p class="eyebrow">${evLabel}</p><h3>${soon}</h3><p><a href="/eventos/">${(dict && dict.home && dict.home.seeEvents) || (lang==='en'?'See events':'Ver eventos')}</a></p>`;
+        else eventsEl.innerHTML = `<p class="eyebrow">${evLabel}</p>` + items.map(ev=>{
+          const title = lang==='en' ? (ev.title_en || ev.title_es || ev.title || '') : (ev.title_es || ev.title_en || ev.title || '');
+          return `<div style="margin:.6rem 0;"><strong>${title}</strong><div style="color:var(--color-text-muted);font-size:.95rem;">${ev.date||''}${ev.time?(' · '+ev.time):''}</div></div>`;
+        }).join('') + `<p style="margin-top:.5rem;"><a href="/eventos/">${seeAll}</a></p>`;
       } catch (e) {
-        eventsEl.innerHTML = `<p class="eyebrow">Eventos</p><p><a href="/eventos/">Ver eventos</a></p>`;
+        eventsEl.innerHTML = `<p class="eyebrow">${evLabel}</p><p><a href="/eventos/">${(dict && dict.home && dict.home.seeEvents) || (lang==='en'?'See events':'Ver eventos')}</a></p>`;
       }
     }
   }
@@ -230,6 +283,8 @@
     const btn = document.getElementById('menuBtn');
     const nav = document.getElementById('mobileNav');
     if (!btn || !nav) return;
+    if (btn.dataset.bound) return;
+    btn.dataset.bound = '1';
     btn.addEventListener('click', () => {
       const open = nav.classList.toggle('open');
       btn.setAttribute('aria-expanded', open ? 'true' : 'false');
@@ -237,12 +292,16 @@
     nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { nav.classList.remove('open'); btn.setAttribute('aria-expanded','false'); }));
   }
 
-  function enhanceHeader() {
+  async function enhanceHeader() {
     const header = document.querySelector('.site-header');
     if (!header) return;
     const inner = header.querySelector('.header-inner');
     if (!inner) return;
-    // Add actions container if missing
+    const lang = getLang();
+    const dict = await loadI18n(lang);
+    const nav = dict && dict.nav ? dict.nav : {};
+    const common = dict && dict.common ? dict.common : {};
+
     let actions = inner.querySelector('.header-actions');
     if (!actions) {
       actions = document.createElement('div');
@@ -253,36 +312,52 @@
       const visit = document.createElement('a');
       visit.className = 'btn btn-primary visit-cta';
       visit.href = '/planifica-tu-visita/';
-      visit.textContent = 'Planifica tu visita';
+      visit.textContent = common.planVisit || (lang==='en'?'Plan your visit':'Planifica tu visita');
       actions.insertBefore(visit, actions.firstChild);
+    } else {
+      inner.querySelector('.visit-cta').textContent = common.planVisit || inner.querySelector('.visit-cta').textContent;
     }
     if (!document.getElementById('langToggle')) {
       const b = document.createElement('button');
       b.type = 'button'; b.className = 'btn btn-primary'; b.id = 'langToggle';
       b.setAttribute('aria-label', 'Cambiar idioma / Switch language');
-      b.textContent = (document.documentElement.lang === 'en') ? 'ES' : 'EN';
+      b.textContent = (lang === 'en') ? 'ES' : 'EN';
       actions.appendChild(b);
+    } else {
+      document.getElementById('langToggle').textContent = (lang === 'en') ? 'ES' : 'EN';
     }
-    // Mobile nav
+
     if (!document.getElementById('mobileNav')) {
-      const nav = document.createElement('nav');
-      nav.id = 'mobileNav';
-      nav.className = 'mobile-nav';
-      nav.setAttribute('aria-label', 'Menú móvil');
-      nav.innerHTML = `<div class="container">
-        <a href="/">Inicio</a>
-        <a href="/planifica-tu-visita/">Planifica tu visita</a>
-        <a href="/nosotros/">Nosotros</a>
-        <a href="/ministerios/">Ministerios</a>
-        <a href="/ver/">Ver</a>
-        <a href="/eventos/">Eventos</a>
-        <a href="/anuncios/">Anuncios</a>
-        <a href="/dar/">Dar</a>
-        <a href="/oracion/">Oración</a>
-        <a href="/contacto/">Contacto</a>
+      const mnav = document.createElement('nav');
+      mnav.id = 'mobileNav';
+      mnav.className = 'mobile-nav';
+      mnav.setAttribute('aria-label', lang==='en' ? 'Mobile menu' : 'Menú móvil');
+      mnav.innerHTML = `<div class="container">
+        <a href="/">${nav.home || 'Inicio'}</a>
+        <a href="/planifica-tu-visita/">${nav.visit || 'Planifica tu visita'}</a>
+        <a href="/nosotros/">${nav.about || 'Nosotros'}</a>
+        <a href="/ministerios/">${nav.ministries || 'Ministerios'}</a>
+        <a href="/ver/">${nav.watch || 'Ver'}</a>
+        <a href="/eventos/">${nav.events || 'Eventos'}</a>
+        <a href="/anuncios/">${nav.announcements || 'Anuncios'}</a>
+        <a href="/dar/">${nav.give || 'Dar'}</a>
+        <a href="/oracion/">${nav.prayer || 'Oración'}</a>
+        <a href="/contacto/">${nav.contact || 'Contacto'}</a>
       </div>`;
-      header.appendChild(nav);
+      header.appendChild(mnav);
+    } else {
+      const map = {
+        '/': nav.home, '/planifica-tu-visita/': nav.visit, '/nosotros/': nav.about, '/ministerios/': nav.ministries,
+        '/ver/': nav.watch, '/eventos/': nav.events, '/anuncios/': nav.announcements, '/dar/': nav.give,
+        '/oracion/': nav.prayer, '/visita-pastoral/': nav.pastoral, '/contacto/': nav.contact
+      };
+      document.querySelectorAll('#mobileNav a').forEach(a => {
+        const href = a.getAttribute('href');
+        if (map[href]) a.textContent = map[href];
+      });
+      document.getElementById('mobileNav').setAttribute('aria-label', lang==='en' ? 'Mobile menu' : 'Menú móvil');
     }
+
     if (!document.getElementById('menuBtn')) {
       const menuBtn = document.createElement('button');
       menuBtn.type = 'button';
@@ -290,53 +365,79 @@
       menuBtn.id = 'menuBtn';
       menuBtn.setAttribute('aria-expanded', 'false');
       menuBtn.setAttribute('aria-controls', 'mobileNav');
-      menuBtn.textContent = 'Menú';
+      menuBtn.textContent = common.menu || (lang==='en'?'Menu':'Menú');
       actions.appendChild(menuBtn);
+    } else {
+      document.getElementById('menuBtn').textContent = common.menu || (lang==='en'?'Menu':'Menú');
     }
+
+    // translate existing desktop nav links by href when present
+    const hrefMap = {
+      '/': nav.home, '/planifica-tu-visita/': nav.visit, '/nosotros/': nav.about, '/ministerios/': nav.ministries,
+      '/ver/': nav.watch, '/eventos/': nav.events, '/anuncios/': nav.announcements, '/dar/': nav.give,
+      '/oracion/': nav.prayer, '/contacto/': nav.contact
+    };
+    document.querySelectorAll('.nav-links a, .brand span').forEach(a => {
+      const href = a.getAttribute && a.getAttribute('href');
+      if (href && hrefMap[href]) a.textContent = hrefMap[href];
+    });
+
+    setupMobileMenu();
   }
 
   function isLiveNowChicago() {
-    // Configurable windows (America/Chicago): Sunday 11:00 AM service and Friday 7:30 PM service.
     const now = new Date();
     const parts = new Intl.DateTimeFormat('en-US', {
       timeZone: 'America/Chicago', weekday: 'short', hour: 'numeric', minute: 'numeric', hour12: false
     }).formatToParts(now);
     const get = (t) => parts.find(p => p.type === t)?.value;
-    const weekday = get('weekday'); // Sun, Mon, ...
+    const weekday = get('weekday');
     const hour = parseInt(get('hour') || '0', 10);
     const minute = parseInt(get('minute') || '0', 10);
     const mins = hour * 60 + minute;
-    // Sunday 11:00 AM ~ 1:30 PM
     if (weekday === 'Sun' && mins >= (11*60) && mins <= (13*60+30)) return true;
-    // Friday 7:30 PM ~ 9:30 PM
     if (weekday === 'Fri' && mins >= (19*60+30) && mins <= (21*60+30)) return true;
     return false;
   }
 
-  function renderLiveBanner() {
+  async function renderLiveBanner() {
     const existing = document.getElementById('liveBanner');
     const live = isLiveNowChicago();
     if (!live) { if (existing) existing.remove(); return; }
-    if (existing) return;
+    const lang = getLang();
+    const dict = await loadI18n(lang);
+    const c = dict && dict.common ? dict.common : {};
+    const text = `<strong>${c.liveNow || (lang==='en'?'We are live':'Estamos en vivo')}</strong> · ${c.joinNow || (lang==='en'?'Join us now':'Acompáñanos ahora')}`;
+    const watch = c.watch || (lang==='en'?'Watch':'Ver');
+    if (existing) {
+      existing.innerHTML = `<div class="container" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.6rem 0;"><span>${text}</span><a class="btn btn-primary" href="/ver/" style="padding:.45rem .8rem;font-size:.9rem;">${watch}</a></div>`;
+      return;
+    }
     const banner = document.createElement('div');
     banner.id = 'liveBanner';
     banner.className = 'live-banner';
-    banner.innerHTML = `<div class="container" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.6rem 0;">
-      <span><strong>Estamos en vivo</strong> · Acompáñanos ahora</span>
-      <a class="btn btn-primary" href="/ver/" style="padding:.45rem .8rem;font-size:.9rem;">Ver</a>
-    </div>`;
+    banner.innerHTML = `<div class="container" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.6rem 0;"><span>${text}</span><a class="btn btn-primary" href="/ver/" style="padding:.45rem .8rem;font-size:.9rem;">${watch}</a></div>`;
     document.body.insertAdjacentElement('afterbegin', banner);
   }
 
-  function ensureMobileBar() {
-    if (document.querySelector('.mobile-bar')) return;
-    const bar = document.createElement('div');
-    bar.className = 'mobile-bar';
-    bar.setAttribute('aria-label', 'Acciones rápidas');
-    bar.innerHTML = `
-      <a class="btn btn-primary" href="https://www.google.com/maps/dir/?api=1&destination=530+N+O%27Connor+Rd%2C+Irving%2C+TX+75061" target="_blank" rel="noopener">Cómo llegar</a>
-      <a class="btn btn-primary" href="tel:+19039980338">Llamar</a>`;
-    document.body.appendChild(bar);
+  async function ensureMobileBar() {
+    let bar = document.querySelector('.mobile-bar');
+    const lang = getLang();
+    const dict = await loadI18n(lang);
+    const c = dict && dict.common ? dict.common : {};
+    const html = `
+      <a class="btn btn-primary" href="https://www.google.com/maps/dir/?api=1&destination=530+N+O%27Connor+Rd%2C+Irving%2C+TX+75061" target="_blank" rel="noopener">${c.directions || (lang==='en'?'Directions':'Cómo llegar')}</a>
+      <a class="btn btn-primary" href="tel:+19039980338">${c.call || (lang==='en'?'Call':'Llamar')}</a>`;
+    if (!bar) {
+      bar = document.createElement('div');
+      bar.className = 'mobile-bar';
+      bar.setAttribute('aria-label', c.quickActions || (lang==='en'?'Quick actions':'Acciones rápidas'));
+      bar.innerHTML = html;
+      document.body.appendChild(bar);
+    } else {
+      bar.innerHTML = html;
+      bar.setAttribute('aria-label', c.quickActions || bar.getAttribute('aria-label') || '');
+    }
   }
 
   function downloadICS({ title, description, location, start, durationMinutes, filename }) {
@@ -368,10 +469,7 @@
       if (!btn) return;
       e.preventDefault();
       const type = btn.getAttribute('data-ics');
-      const location = '530 N O\'Connor Rd, Irving, TX 75061';
-      // Create next occurrence in America/Chicago by approximating with local conversion
-      const now = new Date();
-      // Simple next-occurrence helper using Chicago local time components via Intl not trivial for constructing; use heuristic:
+      const location = "530 N O'Connor Rd, Irving, TX 75061";
       function nextWeekly(day, hour, minute) {
         const d = new Date();
         for (let i=0;i<8;i++){
@@ -386,7 +484,7 @@
     });
   }
 
-  document.addEventListener('DOMContentLoaded', function () {
+  document.addEventListener('DOMContentLoaded', async function () {
     enhanceHeader();
     ensureMobileBar();
     setupLangToggle();
@@ -394,10 +492,7 @@
     setupCookieSettingsLinks();
     setupMobileMenu();
     setupICSButtons();
-    renderNextSpecialSunday();
-    renderNextService();
-    renderHomeExtras();
-    renderLiveBanner();
-    setInterval(renderLiveBanner, 60000);
+    await refreshDynamicContent();
+    setInterval(() => { if (isLiveNowChicago() || document.getElementById('liveBanner')) renderLiveBanner(); }, 60000);
   });
 })();
