@@ -18,13 +18,15 @@
 - [x] Proposed and received approval for fonts and sitemap.
 
 ## Build / functional gaps (ongoing)
-- [ ] Complete full bilingual content/i18n wiring across all pages and remember language consistently.
-- [ ] Implement "next service" countdown, "next special Sunday" (Santa Cena/Ayuno) calculation, verse-of-week block, newsletter signup, add-to-calendar/share features on relevant pages.
-- [ ] Add cookie consent banner with preferences and gate non-essential third-party embeds (YouTube/Maps/facades) accordingly.
-- [ ] Finalize Sveltia CMS config/fields to match all editable content and complete OAuth/repo setup instructions.
+- [ ] Complete full bilingual content/i18n wiring across all pages and remember language consistently. (2026-11-13: added `main.js` support to apply translations for `data-i18n*` elements; pages/content still need keys and translated copy.)
+- [x] SEO basics (partial): absolute canonical URLs on public pages; `robots.txt` and `sitemap.xml` updated with absolute test-site URLs (2026-11-13). Re-run Lighthouse/SEO after deploy.
+- [x] Social/redes links: added black SVG icon assets and social links in site footers and contact page (2026-11-13).
+- [ ] Continue responsive/layout polish to ensure no text overlap at any viewport size (global safeguards added 2026-11-13; needs QA across pages).
+- [ ] Add cookie consent banner with preferences and gate non-essential third-party embeds (YouTube/Maps/facades) accordingly. (baseline exists; audit/enforce fully)
+- [ ] Finalize Sveltia CMS config/fields to match all editable content and complete OAuth/repo setup instructions (token login works; OAuth deferred).
 - [ ] Implement full `npm run photos` pipeline and image optimization/responsive variants per prompt.
 - [ ] Add `npm run audit` (Lighthouse) workflow and fix performance/accessibility/SEO/best-practices issues to 90+.
-- [ ] Add newsletter provider integration steps/details (EmailOctopus/Brevo), form notification setup confirmation, and Google Business Profile checklist.
+- [ ] Add newsletter provider integration steps/details (EmailOctopus/Brevo), form notification setup (Option B/Web3Forms later, per user), and Google Business Profile checklist.
 
 ## Legal/content review
 - [x] Initial bilingual legal/utility pages drafted (privacy, terms, cookies, accessibility, 404); flag for lawyer review before launch.

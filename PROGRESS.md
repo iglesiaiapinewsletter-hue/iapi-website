@@ -1,7 +1,7 @@
 # PROGRESS
 
 ## Current status
-**Build substantially complete (codebase-side, 2026-11-11):** Dark cinematic IAPI rebuild implemented with approved palette/fonts/sitemap and core functionality/content scaffolds. Site is previewable locally (`python3 -m http.server 8080` → `http://127.0.0.1:8080`). Major items completed: core pages, forms, sermon feed function, Watch title parser/filters, dynamic Home features, cookie banner baseline, live banner logic, ICS service calendar links, SEO/schema/favicons/manifest, improved CMS/admin scaffolds, docs (`README.md`, `ADMIN_GUIDE.md`, `SETUP_GUIDE.md`). Remaining external/integration/finalization tasks: connect Netlify/GitHub/CMS OAuth, form notifications/newsletter provider, complete full bilingual wiring across all copy, review/select from processed photo library for page placements, Lighthouse/audit fixes, and launch QA.
+**Build substantially complete and iterating (2026-11-13):** Dark cinematic IAPI rebuild is live for testing at `https://iapi-test-site.netlify.app/` with repo pushed to `main` (`iglesiaiapinewsletter-hue/iapi-website`). CMS admin works via **GitHub Personal Access Token** (OAuth Worker login deferred; `sveltia-cms-auth-2` runtime env binding issue external). Recent fixes: absolute canonical URLs on site pages, absolute `robots.txt` sitemap and `sitemap.xml` locs, black SVG social/redes icons added to footer and contact, and CSS safeguards to reduce text overlap at small/large viewports. Remaining: complete full bilingual wiring (`data-i18n` coverage + dynamic content), photo placement/content polish, Lighthouse/QA fixes, form email notifications (Web3Forms/Option B later), newsletter, OAuth, and go-live tasks.
 
 **Photo processing:** completed 2026-11-11 — 241 approved photos processed (222 women, 18 events, 1 baptism), originals backed up to `photos-originals/inbox-2026-11-11/`, optimized library in `assets/images/library/`, manifest `content/photos.json` (~1.04GB in → ~108MB out). All approved by user; still apply placement/consent judgment when publishing specific images.
 
@@ -29,7 +29,7 @@
 - [2026-11-12] Added GitHub repo `https://github.com/iglesiaiapinewsletter-hue/iapi-website.git` (git initialized locally with `origin` set) and updated `SETUP_GUIDE.md` + `admin/config.yml` to use `iglesiaiapinewsletter-hue/iapi-website`.
 
 ## In progress
-- **None (code implementation paused).** Photo library is processed and ready for selection/placement on pages. Remaining work is primarily integration, content refinement, visual polish, and deployment/QA (see Next steps).
+- **Content/i18n and polish:** full bilingual wiring across pages/components (i18n infrastructure added in `main.js` for `data-i18n*`, but page content not yet fully keyed/translated), photo placement/selection in sections, and responsive QA/Lighthouse follow-up fixes. External tasks deferred by user: form email notifications (Option B later), OAuth Worker login, newsletter provider, domain/go-live.
 
 ## Next steps
 1. **Design/UI:** continue polishing (reduce “solid color” feel on remaining pages, refine hero/imagery, consistent header+mobile nav on every page, improve typography/layout rhythm).
@@ -75,12 +75,12 @@
 
 ## Known issues / bugs
 - Original large images (`congregation.jpg`, `pastor.jpg`) remain in `assets/images/` and still require consent/kids-face review before publish (optimized WebP variants now used in key views). Full photo pipeline/EXIF stripping workflow not yet complete.
-- i18n toggle is placeholder-only (not fully wired across pages/content); English translations/content incomplete.
+- i18n is **partially wired**: `assets/js/main.js` can apply translations for elements with `data-i18n`/`data-i18n-html`/`data-i18n-placeholder`/`data-i18n-aria`, but most page copy is still hardcoded Spanish and not keyed; dynamic JS-rendered strings may not fully switch language. English coverage incomplete.
 - Cookie consent is baseline (accept/reject + settings link) but needs fuller preference management and consistent enforcement/auditing across all embeds/scripts.
-- Sveltia CMS config is a starter (requires real repo/OAuth values and expanded fields/collections).
+- Sveltia CMS OAuth login blocked by external Cloudflare Worker env/binding issue on `sveltia-cms-auth-2` (MISCONFIGURED_CLIENT at runtime); token login works.
 - Sermon function works in Netlify environment; static local server cannot execute `/.netlify/functions/*` (Watch page falls back to channel link).
-- Header/mobile menu markup is not yet consistent across all pages (Home has enhanced header/menu; others still simplified). Visual polish still needed on several interior pages.
-- Event is in `content/events.json` and rendered on Home (static fallback + hero notice) and `/eventos/`; if a browser shows stale content, hard refresh is required.
+- Header/mobile menu markup is not yet consistent across all pages (JS enhances at runtime, but source markup varies). Visual polish still needed on several interior pages.
+- Lighthouse (mobile, user-reported): console/Issues panel items and Best Practices findings may remain; re-test after deploy in clean/incognito context for accurate results.
 
 ## Changelog
 - 2026-11-11: Created `PROGRESS.md`, `TODO.md`, and `PROMPT.md`; recorded initial status and Phase 0 questions.
@@ -96,3 +96,4 @@
 - 2026-11-11 (update): User approved all 241 inbox photos for processing; zip files removed from inbox; background batch processing started to back up originals, categorize, optimize/strip metadata on export, and generate `content/photos.json`.
 - 2026-11-11 (final pass): Added ICS service calendar links, privacy checkboxes on key forms, favicons/manifest, `SETUP_GUIDE.md`, Home schema/OG/canonical, expanded i18n/admin config, and finalized progress/docs for handoff. Photo inbox processing completed (241 photos; `content/photos.json` + `assets/images/library/`). Pastor images rotated 90° CCW.
 - 2026-11-11 (final pass): Switched form notifications/docs/config to Gmail per user override, applied homepage section-specific library photos, increased dark contrast, improved headings/nav styling, simplified Watch Facebook section (link/note, no player), and started rotation of original/source photo copies.
+- 2026-11-13: Set absolute canonical URLs on public pages, made `robots.txt`/`sitemap.xml` use absolute test-site URLs, added black SVG social icons (`assets/images/social-*.svg`) and social links in footers/contact, added global CSS wrap/overlap safeguards and responsive input fixes, and added basic i18n translation-application support in `assets/js/main.js` (`data-i18n*`). Noted that Netlify form email notifications (paid UI) and OAuth Worker remain deferred/external.

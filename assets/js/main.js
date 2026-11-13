@@ -39,14 +39,58 @@
     if (consent) wrap.style.display = 'none';
   }
 
+  let i18nCache = {};
+  async function loadI18n(lang) {
+    if (!lang) lang = document.documentElement.lang || 'es';
+    if (i18nCache[lang]) return i18nCache[lang];
+    try {
+      const r = await fetch('/content/i18n/' + lang + '.json', { cache: 'no-store' });
+      if (!r.ok) throw new Error('i18n');
+      i18nCache[lang] = await r.json();
+      return i18nCache[lang];
+    } catch { return null; }
+  }
+  function getByPath(obj, path) {
+    return path.split('.').reduce((o, k) => (o && o[k] != null ? o[k] : null), obj);
+  }
+  async function applyTranslations(lang) {
+    lang = lang || document.documentElement.lang || 'es';
+    const dict = await loadI18n(lang);
+    if (!dict) return;
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      const val = getByPath(dict, key);
+      if (typeof val === 'string') el.textContent = val;
+    });
+    document.querySelectorAll('[data-i18n-html]').forEach(el => {
+      const key = el.getAttribute('data-i18n-html');
+      const val = getByPath(dict, key);
+      if (typeof val === 'string') el.innerHTML = val;
+    });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+      const key = el.getAttribute('data-i18n-placeholder');
+      const val = getByPath(dict, key);
+      if (typeof val === 'string') el.setAttribute('placeholder', val);
+    });
+    document.querySelectorAll('[data-i18n-aria]').forEach(el => {
+      const key = el.getAttribute('data-i18n-aria');
+      const val = getByPath(dict, key);
+      if (typeof val === 'string') el.setAttribute('aria-label', val);
+    });
+  }
+
   function setupLangToggle() {
     const btn = document.getElementById('langToggle');
+    async function setLang(lang) {
+      document.documentElement.lang = lang;
+      if (btn) btn.textContent = lang === 'en' ? 'ES' : 'EN';
+      try { localStorage.setItem(LANG_KEY, lang); } catch (e) {}
+      await applyTranslations(lang);
+    }
     if (btn) {
       btn.addEventListener('click', function () {
         const isEs = document.documentElement.lang === 'es';
-        document.documentElement.lang = isEs ? 'en' : 'es';
-        btn.textContent = isEs ? 'ES' : 'EN';
-        try { localStorage.setItem(LANG_KEY, document.documentElement.lang); } catch (e) {}
+        setLang(isEs ? 'en' : 'es');
       });
     }
     try {
@@ -56,6 +100,7 @@
         if (btn) btn.textContent = saved === 'en' ? 'ES' : 'EN';
       }
     } catch (e) {}
+    applyTranslations(document.documentElement.lang || 'es');
   }
 
   function computeNextSpecialSunday() {

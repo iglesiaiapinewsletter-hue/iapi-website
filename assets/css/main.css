@@ -98,6 +98,23 @@ p { margin: 0 0 1rem; }
 .btn-secondary { background: rgba(255,255,255,.04); color: #fff; border-color: rgba(255,255,255,.28); }
 .btn-secondary:hover { border-color: rgba(255,255,255,.5); background: rgba(255,255,255,.08); }
 
+/* Global overlap/wrap safeguards */
+:where(h1,h2,h3,h4,h5,h6,p,li,a,span,strong,blockquote,label,button,input,textarea) { overflow-wrap: anywhere; }
+.card, .split > *, .grid > *, .about-showcase-grid > *, .hero-content > *, .service-strip > div { min-width: 0; }
+.hero h1, .hero .tagline, .service-strip, .hero-ctas, .hero-content .grid, .btn { max-width: 100%; }
+.btn { flex-wrap: wrap; text-align: center; white-space: normal; }
+.nav-links { flex-wrap: wrap; }
+input, textarea, select { max-width: 100%; }
+img, svg, video, iframe { max-width: 100%; }
+
+/* Social icon links */
+.social-links { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; margin-top: .75rem; }
+.social-link { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 999px; background: #fff; border: 1px solid rgba(255,255,255,.2); box-shadow: 0 6px 18px rgba(0,0,0,.18); transition: transform .18s ease, box-shadow .18s ease; }
+.social-link:hover { transform: translateY(-1px); box-shadow: 0 10px 22px rgba(0,0,0,.22); }
+.social-link img { width: 20px; height: 20px; display: block; }
+.footer-social { margin-top: .75rem; }
+.footer-social .social-links { margin-top: .4rem; }
+
 /* Header */
 .site-header {
   position: fixed; top: 0; left: 0; right: 0; z-index: 50; height: var(--header-h);
@@ -241,3 +258,16 @@ p { margin: 0 0 1rem; }
   border-bottom: 1px solid rgba(255,255,255,.06);
 }
 .page-intro h1 { margin-bottom: .5rem; }
+
+
+/* Responsive safeguards for inline-styled controls and narrow screens */
+#sermonSearch, .page-intro input[type="search"], .page-intro input[type="text"] { min-width: 0 !important; width: 100%; max-width: 100%; }
+.split, .about-showcase-grid, .grid, .hero-ctas, .header-actions, .nav-links, .social-links { min-width: 0; }
+@media (max-width: 480px) {
+  .hero h1 { font-size: clamp(2.4rem, 13vw, 3.8rem); line-height: .95; }
+  .service-strip { gap: .9rem 1rem; }
+  .service-strip > div { min-width: 0; width: 100%; }
+  .header-inner { gap: .5rem; }
+  .brand span { font-size: .9rem; }
+  .card { padding: 1.1rem; }
+}

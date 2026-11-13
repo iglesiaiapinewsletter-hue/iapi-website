@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>/</loc></url>
-  <url><loc>/planifica-tu-visita/</loc></url>
-  <url><loc>/nosotros/</loc></url>
-  <url><loc>/ministerios/</loc></url>
-  <url><loc>/ver/</loc></url>
-  <url><loc>/eventos/</loc></url>
-  <url><loc>/anuncios/</loc></url>
-  <url><loc>/dar/</loc></url>
-  <url><loc>/oracion/</loc></url>
-  <url><loc>/visita-pastoral/</loc></url>
-  <url><loc>/contacto/</loc></url>
-  <url><loc>/privacidad/</loc></url>
-  <url><loc>/terminos/</loc></url>
-  <url><loc>/cookies/</loc></url>
-  <url><loc>/accesibilidad/</loc></url>
+  <url><loc>https://iapi-test-site.netlify.app/</loc></url>
+  <url><loc>https://iapi-test-site.netlify.app/planifica-tu-visita/</loc></url>
+  <url><loc>https://iapi-test-site.netlify.app/nosotros/</loc></url>
+  <url><loc>https://iapi-test-site.netlify.app/ministerios/</loc></url>
+  <url><loc>https://iapi-test-site.netlify.app/ver/</loc></url>
+  <url><loc>https://iapi-test-site.netlify.app/eventos/</loc></url>
+  <url><loc>https://iapi-test-site.netlify.app/anuncios/</loc></url>
+  <url><loc>https://iapi-test-site.netlify.app/dar/</loc></url>
+  <url><loc>https://iapi-test-site.netlify.app/oracion/</loc></url>
+  <url><loc>https://iapi-test-site.netlify.app/visita-pastoral/</loc></url>
+  <url><loc>https://iapi-test-site.netlify.app/contacto/</loc></url>
+  <url><loc>https://iapi-test-site.netlify.app/privacidad/</loc></url>
+  <url><loc>https://iapi-test-site.netlify.app/terminos/</loc></url>
+  <url><loc>https://iapi-test-site.netlify.app/cookies/</loc></url>
+  <url><loc>https://iapi-test-site.netlify.app/accesibilidad/</loc></url>
 </urlset>
+
