@@ -239,8 +239,8 @@
     "eyebrow": "Transmisiones y mensajes",
     "title": "Ver en línea",
     "lead": "Acompáñanos en vivo los domingos y viernes, o mira mensajes recientes.",
-    "liveTitle": "En vivo / Reciente (YouTube)",
-    "liveDesc": "Se carga automáticamente. Si no hay transmisión en vivo, verás el mensaje o transmisión más reciente.",
+    "liveTitle": "En vivo (YouTube)",
+    "liveDesc": "Se carga automáticamente la transmisión en vivo o la próxima transmisión programada cuando esté disponible en YouTube.",
     "loadStream": "Cargar transmisión",
     "watchYouTube": "Ver en YouTube",
     "facebookTitle": "Facebook",
@@ -263,7 +263,9 @@
     "fbNote": "Síguenos en Facebook para ver nuestras transmisiones en vivo cuando estén disponibles.",
     "fallbackHtml": "No pudimos cargar el archivo automáticamente ahora. <a href=\"https://www.youtube.com/aypirving\" target=\"_blank\" rel=\"noopener\">Visita nuestro canal de YouTube</a>.",
     "iframeTitle": "Transmisión en vivo",
-    "watchYouTubeLink": "Ver en YouTube"
+    "watchYouTubeLink": "Ver en YouTube",
+    "recentMsgLabel": "Mensaje más reciente",
+    "recentIframeTitle": "Mensaje más reciente"
   },
   "events": {
     "eyebrow": "Eventos",

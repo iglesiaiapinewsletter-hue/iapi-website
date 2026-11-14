@@ -239,8 +239,8 @@
     "eyebrow": "Streams and messages",
     "title": "Watch online",
     "lead": "Join us live on Sundays and Fridays, or watch recent messages.",
-    "liveTitle": "Live / Recent (YouTube)",
-    "liveDesc": "Loads automatically. If there is no live stream, you’ll see the most recent message or stream.",
+    "liveTitle": "Live (YouTube)",
+    "liveDesc": "Automatically loads the live stream or the next scheduled stream when available on YouTube.",
     "loadStream": "Load stream",
     "watchYouTube": "Watch on YouTube",
     "facebookTitle": "Facebook",
@@ -263,7 +263,9 @@
     "fbNote": "Follow us on Facebook to watch our live streams when available.",
     "fallbackHtml": "We couldn’t load the archive automatically right now. <a href=\"https://www.youtube.com/aypirving\" target=\"_blank\" rel=\"noopener\">Visit our YouTube channel</a>.",
     "iframeTitle": "Live stream",
-    "watchYouTubeLink": "Watch on YouTube"
+    "watchYouTubeLink": "Watch on YouTube",
+    "recentMsgLabel": "Most recent message",
+    "recentIframeTitle": "Most recent message"
   },
   "events": {
     "eyebrow": "Events",
