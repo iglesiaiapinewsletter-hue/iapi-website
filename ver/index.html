@@ -203,8 +203,9 @@
         try{
           if (!items.length) {
             const r=await fetch('/.netlify/functions/sermons', { cache: 'no-store' });
-            if(!r.ok) throw new Error('bad');
-            const d=await r.json();
+            let d = null;
+            try { d = await r.json(); } catch (_) {}
+            if(!r.ok || !d) throw new Error('bad');
             items=(d.items||[]).map(i => ({...i, meta: parser.parseSermonTitle(i.title || '')}));
           }
           loadRecentEmbed();
@@ -219,7 +220,7 @@
         }catch(e){
           loadLiveEmbed();
           fallback.innerHTML = W('watch.fallbackHtml','No pudimos cargar el archivo automáticamente ahora. <a href="https://www.youtube.com/aypirving" target="_blank" rel="noopener">Visita nuestro canal de YouTube</a>.','We couldn’t load the archive automatically right now. <a href="https://www.youtube.com/aypirving" target="_blank" rel="noopener">Visit our YouTube channel</a>.');
-          if (list) list.innerHTML='';
+          if (list) list.innerHTML = `<div class="card"><p>${W('watch.archiveUnavailable','No se pudo cargar el archivo en este momento. Puedes ver los mensajes directamente en nuestro canal.','The archive could not be loaded right now. You can watch messages directly on our channel.')}</p><p style="margin-top:.5rem;"><a class="btn btn-secondary" href="https://www.youtube.com/aypirving/videos" target="_blank" rel="noopener">YouTube</a></p></div>`;
         }
       }
 

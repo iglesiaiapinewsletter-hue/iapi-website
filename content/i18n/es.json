@@ -265,7 +265,8 @@
     "iframeTitle": "Transmisión en vivo",
     "watchYouTubeLink": "Ver en YouTube",
     "recentMsgLabel": "Mensaje más reciente",
-    "recentIframeTitle": "Mensaje más reciente"
+    "recentIframeTitle": "Mensaje más reciente",
+    "archiveUnavailable": "No se pudo cargar el archivo en este momento. Puedes ver los mensajes directamente en nuestro canal."
   },
   "events": {
     "eyebrow": "Eventos",

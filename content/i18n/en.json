@@ -265,7 +265,8 @@
     "iframeTitle": "Live stream",
     "watchYouTubeLink": "Watch on YouTube",
     "recentMsgLabel": "Most recent message",
-    "recentIframeTitle": "Most recent message"
+    "recentIframeTitle": "Most recent message",
+    "archiveUnavailable": "The archive could not be loaded right now. You can watch messages directly on our channel."
   },
   "events": {
     "eyebrow": "Events",
