@@ -150,6 +150,31 @@
         return `<button type="button" class="btn ${active?'btn-primary':'btn-secondary'}" data-chip="1" ${attrs} style="padding:.45rem .8rem;font-size:.9rem;">${label}</button>`;
       }
 
+      async function fetchSermonsClientFallback() {
+        const FEED = 'https://www.youtube.com/feeds/videos.xml?channel_id=UCidzfKBmsuv01CCQIQkCofw';
+        const url = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(FEED);
+        const r = await fetch(url, { cache: 'no-store' });
+        if (!r.ok) throw new Error('proxy');
+        const xmlText = await r.text();
+        const doc = new DOMParser().parseFromString(xmlText, 'text/xml');
+        const entries = Array.from(doc.querySelectorAll('entry'));
+        return entries.map((entry) => {
+          const get = (sel) => (entry.querySelector(sel)?.textContent || '').trim();
+          const title = get('title');
+          const published = get('published');
+          let description = get('media\\:description') || '';
+          if (!description) {
+            // try namespaced/media group via getElementsByTagNameNS fallback
+            const media = entry.getElementsByTagName('media:description')[0] || entry.getElementsByTagNameNS('*','description')[0];
+            description = (media?.textContent || '').trim();
+          }
+          const id = get('yt\\:videoId') || (entry.getElementsByTagName('yt:videoId')[0]?.textContent || '').trim();
+          const linkEl = entry.querySelector('link[href]');
+          const link = (linkEl && linkEl.getAttribute('href')) || (id ? `https://www.youtube.com/watch?v=${id}` : '');
+          return { id, title, description, published, link };
+        }).filter(i => i.title && i.link);
+      }
+
       function buildFilters() {
         const typeSet = new Set();
         const monthSet = new Set();
@@ -205,19 +230,22 @@
             const r=await fetch('/.netlify/functions/sermons', { cache: 'no-store' });
             let d = null;
             try { d = await r.json(); } catch (_) {}
-            if(!d) throw new Error('bad');
-            items=(d.items||[]).map(i => ({...i, meta: parser.parseSermonTitle(i.title || '')}));
-            if ((!items.length) && d.error) throw new Error('feed');
+            if (d && Array.isArray(d.items) && d.items.length) {
+              items = d.items.map(i => ({...i, meta: parser.parseSermonTitle(i.title || '')}));
+            }
           }
+          if (!items.length) {
+            try {
+              const fb = await fetchSermonsClientFallback();
+              if (fb && fb.length) items = fb.map(i => ({...i, meta: parser.parseSermonTitle(i.title || '')}));
+            } catch (e) {}
+          }
+          if (!items.length) throw new Error('feed');
           loadRecentEmbed();
           buildFilters();
           render();
           if (!search.dataset.bound) { search.addEventListener('input',render); search.dataset.bound='1'; }
-          if (!items.length) {
-            fallback.innerHTML = W('watch.fallbackHtml','No pudimos cargar el archivo automáticamente ahora. <a href="https://www.youtube.com/aypirving" target="_blank" rel="noopener">Visita nuestro canal de YouTube</a>.','We couldn’t load the archive automatically right now. <a href="https://www.youtube.com/aypirving" target="_blank" rel="noopener">Visit our YouTube channel</a>.');
-          } else {
-            fallback.innerHTML = '';
-          }
+          fallback.innerHTML = '';
         }catch(e){
           loadLiveEmbed();
           fallback.innerHTML = W('watch.fallbackHtml','No pudimos cargar el archivo automáticamente ahora. <a href="https://www.youtube.com/aypirving" target="_blank" rel="noopener">Visita nuestro canal de YouTube</a>.','We couldn’t load the archive automatically right now. <a href="https://www.youtube.com/aypirving" target="_blank" rel="noopener">Visit our YouTube channel</a>.');
