@@ -29,9 +29,9 @@
 - [2026-11-12] Added GitHub repo `https://github.com/iglesiaiapinewsletter-hue/iapi-website.git` (git initialized locally with `origin` set) and updated `SETUP_GUIDE.md` + `admin/config.yml` to use `iglesiaiapinewsletter-hue/iapi-website`.
 
 ## In progress
-- **QA (user + code follow-up):** spot-check ES/EN toggle on every public page after deploy, responsive/no-overlap checks, link/form/ICS/embed checks, and content/facts review. Fix any issues found.
-- **Polish:** additional photo placement refinements as desired (different intro images added to key interior pages from existing library, 2026-11-13), Lighthouse/accessibility/best-practices follow-up on deployed site (incognito).
-- **External tasks deferred by user:** form email notifications (Option B/Web3Forms later), OAuth Worker login, newsletter provider, domain/go-live.
+- **QA (user + code follow-up):** spot-check ES/EN toggle on every public page after deploy, verify new Ver/map/announcements/events behavior, responsive/no-overlap checks, link/form/ICS/embed checks, and content/facts review. Fix any issues found.
+- **Polish:** Lighthouse/accessibility/best-practices/performance follow-up on deployed site (incognito) based on specific console/Issues findings.
+- **External tasks deferred by user:** form email notifications (Option B/Web3Forms later), newsletter provider, domain/go-live. **OAuth CMS login** (next, on request) — see steps provided to user.
 
 ## Next steps
 1. **Design/UI:** continue polishing (reduce “solid color” feel on remaining pages, refine hero/imagery, consistent header+mobile nav on every page, improve typography/layout rhythm).
@@ -102,3 +102,4 @@
 - 2026-11-13 (cont.): Expanded i18n dictionaries, made `main.js` translate injected/shared chrome and dynamic home content by language, added `data-i18n` to shared nav/footer/skip/mobile elements across pages, and wired most static Home content for ES/EN toggling.
 - 2026-11-13 (cont. 2): Completed whole-site bilingual wiring (default Spanish, EN toggle). Updated `content/i18n/es.json` & `en.json`, `assets/js/main.js` (cookie banner + lang defaults/events), and all public pages (`index.html`, planifica-tu-visita, nosotros, ministerios, ver, eventos, anuncios, dar, oracion, visita-pastoral, contacto, privacidad, terminos, cookies, accesibilidad, 404) with `data-i18n*` content and language-aware page scripts (ver filters/messages, eventos/anuncios rendering).
 - 2026-11-13 (cont. 3): Verified language-toggle coverage in code (header-enhanced pages + static toggle on legal/404), added distinct existing-library intro background photos to key interior pages, and ran local checks (pages 200, local Lighthouse home: SEO 100, Accessibility 100, Best Practices 96; console error likely due to local Netlify function unavailable). Deploy/retest on Netlify for final QA.
+- 2026-11-13 (cont. 4): Fixed Eventos header consistency; made Planifica tu visita map auto-load; updated Ver to auto-load latest/recent YouTube embed (fallback to channel live embed) and search archive by title+description; extended `netlify/functions/sermons.js` to include descriptions; rebuilt `/anuncios/` as presentation slideshow (one slide, auto 20s, prev/next arrows, click-to-zoom, CMS image/text support) with updated admin config/i18n/CSS. OAuth CMS login still pending (external).

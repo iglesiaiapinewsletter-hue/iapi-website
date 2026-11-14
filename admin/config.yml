@@ -97,10 +97,13 @@ collections:
             widget: "list"
             summary: "{{fields.title_es}}"
             fields:
-              - { label: "Título (ES)", name: "title_es", widget: "string" }
+              - { label: "Título (ES)", name: "title_es", widget: "string", required: false }
               - { label: "Título (EN)", name: "title_en", widget: "string", required: false }
               - { label: "Fecha", name: "date", widget: "string", required: false }
-              - { label: "Contenido (ES)", name: "body_es", widget: "text" }
+              - { label: "Imagen / diapositiva", name: "image", widget: "image", required: false }
+              - { label: "Texto alternativo (ES)", name: "alt_es", widget: "string", required: false }
+              - { label: "Texto alternativo (EN)", name: "alt_en", widget: "string", required: false }
+              - { label: "Contenido (ES)", name: "body_es", widget: "text", required: false }
               - { label: "Contenido (EN)", name: "body_en", widget: "text", required: false }
   - name: "videos"
     label: "Videos"

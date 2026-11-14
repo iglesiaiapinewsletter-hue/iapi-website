@@ -20,11 +20,12 @@
     <section class="section page-intro" style="background:linear-gradient(rgba(2,8,18,.88),rgba(4,14,30,.82)),url('/assets/images/library/events/events-226-dsc-0024-1200.webp') center/cover no-repeat;"><div class="container"><p class="eyebrow" data-i18n="watch.eyebrow">Transmisiones y mensajes</p><h1 data-i18n="watch.title">Ver en línea</h1><p class="lead" data-i18n="watch.lead">Acompáñanos en vivo los domingos y viernes, o mira mensajes recientes.</p></div></section>
     <section class="section section-alt"><div class="container grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr));">
       <div class="card">
-        <h2 data-i18n="watch.liveTitle">En vivo (YouTube)</h2>
-        <p data-i18n="watch.liveDesc">Haz clic para cargar la transmisión cuando esté disponible.</p>
-        <button class="btn btn-primary" data-embed data-src="https://www.youtube-nocookie.com/embed/live_stream?channel=UCidzfKBmsuv01CCQIQkCofw" data-i18n="watch.loadStream">Cargar transmisión</button>
-        <div class="embed-slot" style="margin-top:1rem;aspect-ratio:16/9;background:rgba(255,255,255,.04);border-radius:12px;overflow:hidden;"></div>
-        <p style="margin-top:1rem;"><a href="https://www.youtube.com/aypirving" target="_blank" rel="noopener" data-i18n="watch.watchOnYouTube">Ver en YouTube</a></p>
+        <h2 data-i18n="watch.liveTitle">En vivo / Reciente (YouTube)</h2>
+        <p data-i18n="watch.liveDesc">Se carga automáticamente. Si no hay transmisión en vivo, verás el mensaje o transmisión más reciente.</p>
+        <div id="liveEmbedSlot" class="embed-slot" style="margin-top:1rem;aspect-ratio:16/9;background:rgba(255,255,255,.04);border-radius:12px;overflow:hidden;"></div>
+        <p style="margin-top:1rem;display:flex;flex-wrap:wrap;gap:.5rem;">
+          <a class="btn btn-secondary" href="https://www.youtube.com/aypirving/live" target="_blank" rel="noopener" data-i18n="watch.watchOnYouTube">Ver en YouTube</a>
+        </p>
       </div>
       <div class="card">
         <h2 data-i18n="watch.fbTitle">Facebook</h2>
@@ -60,18 +61,12 @@
   </div></footer>
   <script src="/assets/js/sermon-title-parser.js"></script>
   <script>
-    document.addEventListener('click', (e)=>{
-      const b=e.target.closest('[data-embed]'); if(!b) return;
-      const slot=b.parentElement.querySelector('.embed-slot'); if(!slot||slot.dataset.loaded) return;
-      const iframe=document.createElement('iframe'); iframe.src=b.getAttribute('data-src'); iframe.title=(document.documentElement.lang==='en'?'Live stream':'Transmisión en vivo'); iframe.loading='lazy';
-      iframe.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'; iframe.allowFullscreen=true;
-      iframe.style.width='100%'; iframe.style.height='100%'; iframe.style.border='0'; slot.appendChild(iframe); slot.dataset.loaded='1'; b.remove();
-    });
     (async function(){
       const list=document.getElementById('sermons');
       const fallback=document.getElementById('sermonsFallback');
       const search=document.getElementById('sermonSearch');
       const filtersEl=document.getElementById('sermonFilters');
+      const liveSlot=document.getElementById('liveEmbedSlot');
       const parser = window.IAPISermonParser || { parseSermonTitle: (t)=>({original:t||'',parsed:false,serviceType:null,date:null,displayTitle:t||''}), monthYearLabel:(m)=>m };
       let items=[];
       let activeType='all';
@@ -87,6 +82,25 @@
         const parts = path.split('.');
         let v = i18n; for (const p of parts) v = v && v[p];
         return (typeof v === 'string') ? v : (lang === 'en' ? en : es);
+      }
+
+      function loadLatestEmbed() {
+        if (!liveSlot || liveSlot.dataset.loaded) return;
+        const first = items[0];
+        let src = 'https://www.youtube-nocookie.com/embed/live_stream?channel=UCidzfKBmsuv01CCQIQkCofw';
+        if (first && first.id) src = `https://www.youtube-nocookie.com/embed/${first.id}`;
+        else if (first && first.link) {
+          const m = (first.link || '').match(/[?&]v=([^&]+)/);
+          if (m) src = `https://www.youtube-nocookie.com/embed/${m[1]}`;
+        }
+        const iframe=document.createElement('iframe');
+        iframe.src=src;
+        iframe.title=W('watch.iframeTitle','Transmisión en vivo o reciente','Live or recent stream');
+        iframe.loading='lazy';
+        iframe.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+        iframe.allowFullscreen=true;
+        iframe.style.width='100%'; iframe.style.height='100%'; iframe.style.border='0';
+        liveSlot.innerHTML=''; liveSlot.appendChild(iframe); liveSlot.dataset.loaded='1';
       }
 
       function chip(label, active, attrs='') {
@@ -112,14 +126,14 @@
       }
 
       function render(){
-        const q=(search.value||'').toLowerCase();
+        const q=(search.value||'').toLowerCase().trim();
         const watchLink = W('watch.watchYouTubeLink','Ver en YouTube','Watch on YouTube');
         const noMsg = W('watch.noMessages','No hay mensajes para mostrar.','No messages to show.');
         const filtered=items.filter(i=>{
-          const hay = `${i.title||''} ${i.meta?.serviceType||''} ${i.meta?.date?.label||''}`.toLowerCase();
+          const hay = `${i.title||''} ${i.description||''} ${i.meta?.serviceType||''} ${i.meta?.date?.label||''}`.toLowerCase();
           if (q && !hay.includes(q)) return false;
           const unmatched = !i.meta || i.meta.parsed === false;
-          if (unmatched) return true;
+          if (unmatched) return !q || hay.includes(q);
           if (activeType !== 'all' && i.meta.serviceType !== activeType) return false;
           if (activeMonth !== 'all' && i.meta?.date?.monthYear !== activeMonth) return false;
           return true;
@@ -148,10 +162,20 @@
             const d=await r.json();
             items=(d.items||[]).map(i => ({...i, meta: parser.parseSermonTitle(i.title || '')}));
           }
+          loadLatestEmbed();
           buildFilters();
           render();
           if (!search.dataset.bound) { search.addEventListener('input',render); search.dataset.bound='1'; }
         }catch(e){
+          // still try to load live embed as fallback
+          if (liveSlot && !liveSlot.dataset.loaded) {
+            const iframe=document.createElement('iframe');
+            iframe.src='https://www.youtube-nocookie.com/embed/live_stream?channel=UCidzfKBmsuv01CCQIQkCofw';
+            iframe.title=W('watch.iframeTitle','Transmisión en vivo o reciente','Live or recent stream');
+            iframe.loading='lazy'; iframe.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'; iframe.allowFullscreen=true;
+            iframe.style.width='100%'; iframe.style.height='100%'; iframe.style.border='0';
+            liveSlot.innerHTML=''; liveSlot.appendChild(iframe); liveSlot.dataset.loaded='1';
+          }
           fallback.innerHTML = W('watch.fallbackHtml','No pudimos cargar el archivo automáticamente ahora. <a href="https://www.youtube.com/aypirving" target="_blank" rel="noopener">Visita nuestro canal de YouTube</a>.','We couldn’t load the archive automatically right now. <a href="https://www.youtube.com/aypirving" target="_blank" rel="noopener">Visit our YouTube channel</a>.');
           list.innerHTML='';
         }

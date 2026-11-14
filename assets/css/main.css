@@ -260,6 +260,30 @@ img, svg, video, iframe { max-width: 100%; }
 .page-intro h1 { margin-bottom: .5rem; }
 
 
+/* Announcements slideshow */
+.ann-slideshow { position: relative; margin-top: 1.5rem; }
+.ann-viewport { position: relative; overflow: hidden; border-radius: 18px; border: 1px solid rgba(255,255,255,.1); background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02)); min-height: 320px; }
+.ann-slide { display: none; padding: 1rem; }
+.ann-slide.active { display: block; }
+.ann-slide-media { width: 100%; aspect-ratio: 16 / 9; background: rgba(255,255,255,.03); border-radius: 12px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+.ann-slide-media img { width: 100%; height: 100%; object-fit: contain; cursor: zoom-in; display: block; }
+.ann-slide-media.text-only { padding: 2rem; align-items: flex-start; justify-content: center; flex-direction: column; aspect-ratio: auto; min-height: 280px; cursor: zoom-in; }
+.ann-slide-caption { margin-top: .9rem; }
+.ann-slide-caption h2 { font-size: 1.8rem; margin-bottom: .25rem; }
+.ann-slide-meta { color: var(--color-text-muted); font-size: .95rem; margin-bottom: .35rem; }
+.ann-controls { display: flex; align-items: center; justify-content: space-between; gap: .75rem; margin-top: 1rem; flex-wrap: wrap; }
+.ann-arrows { display: flex; gap: .5rem; }
+.ann-arrow { width: 44px; height: 44px; border-radius: 999px; border: 1px solid rgba(255,255,255,.25); background: rgba(255,255,255,.05); color: #fff; font-size: 1.2rem; cursor: pointer; }
+.ann-arrow:hover { background: rgba(255,255,255,.1); }
+.ann-counter { color: var(--color-text-muted); font-weight: 600; }
+.ann-lightbox { position: fixed; inset: 0; z-index: 100; background: rgba(2,8,18,.92); display: none; align-items: center; justify-content: center; padding: 1rem; }
+.ann-lightbox.open { display: flex; }
+.ann-lightbox-inner { position: relative; max-width: min(1100px, 100%); max-height: 90vh; width: 100%; }
+.ann-lightbox-content { max-height: 85vh; overflow: auto; border-radius: 14px; background: rgba(10,42,82,.85); border: 1px solid rgba(255,255,255,.12); padding: .75rem; }
+.ann-lightbox-content img { max-width: 100%; max-height: 80vh; width: auto; height: auto; margin: 0 auto; display: block; border-radius: 8px; }
+.ann-lightbox-close { position: absolute; top: -0.5rem; right: -0.25rem; width: 42px; height: 42px; border-radius: 999px; border: 1px solid rgba(255,255,255,.25); background: #061d40; color: #fff; font-size: 1.4rem; cursor: pointer; }
+.ann-empty { }
+
 /* Responsive safeguards for inline-styled controls and narrow screens */
 #sermonSearch, .page-intro input[type="search"], .page-intro input[type="text"] { min-width: 0 !important; width: 100%; max-width: 100%; }
 .split, .about-showcase-grid, .grid, .hero-ctas, .header-actions, .nav-links, .social-links { min-width: 0; }
@@ -270,4 +294,5 @@ img, svg, video, iframe { max-width: 100%; }
   .header-inner { gap: .5rem; }
   .brand span { font-size: .9rem; }
   .card { padding: 1.1rem; }
+  .ann-slide-media { aspect-ratio: 4 / 3; }
 }

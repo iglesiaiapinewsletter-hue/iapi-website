@@ -26,7 +26,9 @@
 - [ ] Finalize Sveltia CMS config/fields to match all editable content and complete OAuth/repo setup instructions (token login works; OAuth deferred).
 - [ ] Implement full `npm run photos` pipeline and image optimization/responsive variants per prompt.
 - [ ] Add `npm run audit` (Lighthouse) workflow and fix performance/accessibility/SEO/best-practices issues to 90+.
+- [x] Announcements page: presentation-style slideshow (one at a time, auto 20s, prev/next arrows, click-to-zoom) with CMS-uploadable image slides (2026-11-13).
 - [ ] Add newsletter provider integration steps/details (EmailOctopus/Brevo), form notification setup (Option B/Web3Forms later, per user), and Google Business Profile checklist.
+- [ ] Fix Sveltia CMS OAuth login (Cloudflare Worker env/binding + GitHub App callback) so token is not required.
 
 ## Legal/content review
 - [x] Initial bilingual legal/utility pages drafted (privacy, terms, cookies, accessibility, 404); flag for lawyer review before launch.

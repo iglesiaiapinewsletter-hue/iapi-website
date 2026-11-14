@@ -6,7 +6,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/css/main.css">
-  <style>@media print {.site-header,.mobile-bar,.no-print{display:none!important} body{background:#fff;color:#000;padding:0} .card{box-shadow:none;border:1px solid #ddd}}</style>
+  <style>@media print {.site-header,.mobile-bar,.no-print,.ann-controls,.ann-lightbox{display:none!important} body{background:#fff;color:#000;padding:0} .card,.ann-viewport{box-shadow:none;border:1px solid #ddd}}</style>
   <link rel="icon" type="image/png" href="/assets/images/favicon-96x96.png" sizes="96x96">
   <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg">
   <link rel="shortcut icon" href="/assets/images/favicon.ico">
@@ -16,10 +16,41 @@
 </head>
 <body>
   <a class="skip-link" href="#main" data-i18n="common.skipToContent">Saltar al contenido</a>
-  <header class="site-header"><div class="container header-inner"><a class="brand" href="/"><img src="/assets/images/logo.png" alt="Logo de IAPI"><span>IAPI Irving</span></a><nav aria-label="Principal"><ul class="nav-links"><li><a href="/anuncios/" aria-current="page" data-i18n="nav.announcements">Anuncios</a></li><li><a href="/eventos/" data-i18n="nav.events">Eventos</a></li></ul></nav></div></header>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="/"><img src="/assets/images/logo.png" alt="Logo de IAPI"><span>IAPI Irving</span></a>
+      <nav aria-label="Principal">
+        <ul class="nav-links">
+          <li><a href="/planifica-tu-visita/" data-i18n="nav.visit">Planifica tu visita</a></li>
+          <li><a href="/nosotros/" data-i18n="nav.about">Nosotros</a></li>
+          <li><a href="/ver/" data-i18n="nav.watch">Ver</a></li>
+          <li><a href="/eventos/" data-i18n="nav.events">Eventos</a></li>
+          <li><a href="/anuncios/" aria-current="page" data-i18n="nav.announcements">Anuncios</a></li>
+          <li><a href="/contacto/" data-i18n="nav.contact">Contacto</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions"><a class="btn btn-primary visit-cta" href="/planifica-tu-visita/" data-i18n="common.planVisit">Planifica tu visita</a></div>
+    </div>
+  </header>
   <main id="main" style="padding-top:var(--header-h);">
-    <section class="section page-intro" style="background:linear-gradient(rgba(2,8,18,.88),rgba(4,14,30,.82)),url('/assets/images/library/events/events-228-dsc-0028-1200.webp') center/cover no-repeat;"><div class="container"><div style="display:flex;justify-content:space-between;gap:1rem;align-items:end;flex-wrap:wrap;"><div><p class="eyebrow" data-i18n="announcements.eyebrow">Boletín</p><h1 data-i18n="announcements.title">Anuncios</h1><p class="lead" data-i18n="announcements.lead">Noticias y anuncios de la iglesia.</p></div><button class="btn btn-secondary no-print" onclick="window.print()" data-i18n="announcements.print">Imprimir</button></div><div id="annList" class="grid" style="margin-top:1.5rem;"></div></div></section>
+    <section class="section page-intro" style="background:linear-gradient(rgba(2,8,18,.88),rgba(4,14,30,.82)),url('/assets/images/library/events/events-228-dsc-0028-1200.webp') center/cover no-repeat;">
+      <div class="container">
+        <div style="display:flex;justify-content:space-between;gap:1rem;align-items:end;flex-wrap:wrap;">
+          <div><p class="eyebrow" data-i18n="announcements.eyebrow">Boletín</p><h1 data-i18n="announcements.title">Anuncios</h1><p class="lead" data-i18n="announcements.lead">Noticias y anuncios de la iglesia.</p></div>
+          <button class="btn btn-secondary no-print" onclick="window.print()" data-i18n="announcements.print">Imprimir</button>
+        </div>
+        <div id="annSlideshow" class="ann-slideshow" aria-live="polite"></div>
+      </div>
+    </section>
   </main>
+
+  <div id="annLightbox" class="ann-lightbox" aria-hidden="true">
+    <div class="ann-lightbox-inner">
+      <button type="button" class="ann-lightbox-close" id="annLightboxClose" aria-label="Cerrar">&times;</button>
+      <div class="ann-lightbox-content" id="annLightboxContent"></div>
+    </div>
+  </div>
+
   <footer class="site-footer"><div class="container">
     <p><strong>Iglesia Apóstoles y Profetas Irving (IAPI)</strong></p>
     <p>530 N O'Connor Rd, Irving, TX 75061 · <a href="tel:+19039980338">(903) 998-0338</a></p>
@@ -35,27 +66,138 @@
     <p style="margin-top:.75rem;font-size:.95rem;"><a href="/privacidad/" data-i18n="footer.privacy">Privacidad</a> · <a href="/terminos/" data-i18n="footer.terms">Términos</a> · <a href="/cookies/" data-i18n="footer.cookies">Cookies</a> · <a href="/accesibilidad/" data-i18n="footer.accessibility">Accesibilidad</a> · <a href="#cookie-settings" data-i18n="footer.cookieSettings">Configuración de cookies</a></p>
     <p style="font-size:.95rem;">© 2026 Iglesia Apostoles y Profetas USA en Irving.</p>
   </div></footer>
+
   <script>
-    (async function(){
-      const el=document.getElementById('annList');
+    (function(){
+      const root = document.getElementById('annSlideshow');
+      const lightbox = document.getElementById('annLightbox');
+      const lightboxContent = document.getElementById('annLightboxContent');
+      const lightboxClose = document.getElementById('annLightboxClose');
       let data = null;
-      async function render(){
+      let items = [];
+      let index = 0;
+      let timer = null;
+      let i18n = null;
+
+      async function loadI18n(){
         const lang = document.documentElement.lang === 'en' ? 'en' : 'es';
-        try{
-          if (!data) { const r=await fetch('/content/announcements.json', {cache:'no-store'}); data=await r.json(); }
-          const items=data.announcements||[];
-          if(!items.length){
-            const t = lang==='en' ? 'Coming soon' : 'Próximamente';
-            const d = lang==='en' ? 'No announcements have been published yet.' : 'No hay anuncios publicados por ahora.';
-            el.innerHTML=`<div class="card"><h2>${t}</h2><p>${d}</p></div>`;return;
-          }
-          el.innerHTML=items.map(a=>{
-            const title = (lang==='en' ? (a.title_en || a.title_es) : (a.title_es || a.title_en)) || a.title || '';
-            const body = (lang==='en' ? (a.body_en || a.body_es) : (a.body_es || a.body_en)) || a.body || '';
-            return `<article class="card"><h2>${title}</h2><p><strong>${a.date||''}</strong></p><p>${body}</p></article>`;
-          }).join('');
-        }catch(e){el.innerHTML=`<div class="card"><p>${lang==='en'?'We couldn’t load announcements.':'No pudimos cargar los anuncios.'}</p></div>`;}
+        try { const r = await fetch('/content/i18n/'+lang+'.json', {cache:'no-store'}); i18n = await r.json(); } catch { i18n = null; }
       }
+      function t(path, es, en){
+        const lang = document.documentElement.lang === 'en' ? 'en' : 'es';
+        let v = i18n; for (const p of path.split('.')) v = v && v[p];
+        return (typeof v === 'string') ? v : (lang==='en'?en:es);
+      }
+      function esc(s){ return String(s||'').replace(/[&<>"']/g, c=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c])); }
+
+      function stopAuto(){ if (timer) { clearInterval(timer); timer = null; } }
+      function startAuto(){
+        stopAuto();
+        if (items.length <= 1) return;
+        if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        timer = setInterval(()=>{ index = (index + 1) % items.length; renderSlides(); }, 20000);
+      }
+
+      function openLightbox(html){
+        lightboxContent.innerHTML = html;
+        lightbox.classList.add('open');
+        lightbox.setAttribute('aria-hidden','false');
+        stopAuto();
+        lightboxClose.focus();
+      }
+      function closeLightbox(){
+        lightbox.classList.remove('open');
+        lightbox.setAttribute('aria-hidden','true');
+        lightboxContent.innerHTML = '';
+        startAuto();
+      }
+
+      function currentSlideHtml(a){
+        const lang = document.documentElement.lang === 'en' ? 'en' : 'es';
+        const title = (lang==='en' ? (a.title_en || a.title_es) : (a.title_es || a.title_en)) || a.title || '';
+        const body = (lang==='en' ? (a.body_en || a.body_es) : (a.body_es || a.body_en)) || a.body || '';
+        const alt = (lang==='en' ? (a.alt_en || a.alt_es || title) : (a.alt_es || a.alt_en || title)) || t('announcements.zoom','Ampliar anuncio','Zoom announcement');
+        const date = a.date || '';
+        if (a.image) {
+          const cap = (title || date || body) ? `<div class="ann-slide-caption">${title?`<h2>${esc(title)}</h2>`:''}${date?`<p class="ann-slide-meta">${esc(date)}</p>`:''}${body?`<p>${esc(body)}</p>`:''}</div>` : '';
+          return `<div class="ann-slide-media"><img src="${esc(a.image)}" alt="${esc(alt)}" data-zoom="1"></div>${cap}`;
+        }
+        return `<div class="ann-slide-media text-only" data-zoom="1" tabindex="0" role="button" aria-label="${esc(t('announcements.zoom','Ampliar anuncio','Zoom announcement'))}">
+          <div>${title?`<h2 style="margin-top:0;">${esc(title)}</h2>`:''}${date?`<p class="ann-slide-meta">${esc(date)}</p>`:''}${body?`<p style="font-size:1.1rem;max-width:60ch;">${esc(body)}</p>`:''}</div>
+        </div>`;
+      }
+
+      function renderSlides(){
+        if (!items.length) {
+          root.innerHTML = `<div class="card ann-empty"><h2>${esc(t('announcements.soonTitle','Próximamente','Coming soon'))}</h2><p>${esc(t('announcements.soonDesc','No hay anuncios publicados por ahora.','No announcements have been published yet.'))}</p></div>`;
+          stopAuto();
+          return;
+        }
+        const lang = document.documentElement.lang === 'en' ? 'en' : 'es';
+        const prev = t('announcements.prev','Anterior','Previous');
+        const next = t('announcements.next','Siguiente','Next');
+        const slideLabel = t('announcements.slide','Diapositiva','Slide');
+        const ofLabel = t('announcements.of','de','of');
+        const slides = items.map((a,i)=>`<div class="ann-slide ${i===index?'active':''}" data-index="${i}">${currentSlideHtml(a)}</div>`).join('');
+        const controls = items.length > 1 ? `<div class="ann-controls no-print">
+          <div class="ann-arrows">
+            <button type="button" class="ann-arrow" data-dir="-1" aria-label="${esc(prev)}">&#10094;</button>
+            <button type="button" class="ann-arrow" data-dir="1" aria-label="${esc(next)}">&#10095;</button>
+          </div>
+          <div class="ann-counter" aria-label="${esc(slideLabel)} ${index+1} ${esc(ofLabel)} ${items.length}">${index+1} / ${items.length}</div>
+        </div>` : '';
+        root.innerHTML = `<div class="ann-viewport">${slides}</div>${controls}`;
+      }
+
+      async function render(){
+        await loadI18n();
+        if (lightboxClose) lightboxClose.setAttribute('aria-label', t('announcements.close','Cerrar','Close'));
+        try {
+          if (!data) { const r = await fetch('/content/announcements.json', {cache:'no-store'}); data = await r.json(); }
+          items = (data.announcements || []).filter(a => a && (a.image || a.title_es || a.title_en || a.body_es || a.body_en));
+          if (index >= items.length) index = 0;
+          renderSlides();
+          startAuto();
+        } catch (e) {
+          root.innerHTML = `<div class="card"><p>${esc(t('announcements.error','No pudimos cargar los anuncios.','We couldn’t load announcements.'))}</p></div>`;
+        }
+      }
+
+      root.addEventListener('click', (e)=>{
+        const dirBtn = e.target.closest('[data-dir]');
+        if (dirBtn && items.length) {
+          const dir = parseInt(dirBtn.getAttribute('data-dir'),10);
+          index = (index + dir + items.length) % items.length;
+          renderSlides(); startAuto();
+          return;
+        }
+        const zoomEl = e.target.closest('[data-zoom], .ann-slide-media img');
+        if (zoomEl && items[index]) {
+          const a = items[index];
+          const lang = document.documentElement.lang === 'en' ? 'en' : 'es';
+          const title = (lang==='en' ? (a.title_en || a.title_es) : (a.title_es || a.title_en)) || a.title || '';
+          const body = (lang==='en' ? (a.body_en || a.body_es) : (a.body_es || a.body_en)) || a.body || '';
+          const alt = (lang==='en' ? (a.alt_en || a.alt_es || title) : (a.alt_es || a.alt_en || title)) || title;
+          const date = a.date || '';
+          if (a.image) {
+            openLightbox(`<img src="${esc(a.image)}" alt="${esc(alt)}">${(title||date||body)?`<div style="padding:.75rem .25rem .25rem;"><strong style="font-size:1.2rem;">${esc(title)}</strong>${date?`<div style="color:var(--color-text-muted);margin-top:.2rem;">${esc(date)}</div>`:''}${body?`<p style="margin:.5rem 0 0;">${esc(body)}</p>`:''}</div>`:''}`);
+          } else {
+            openLightbox(`<div style="padding:1rem 1.25rem;">${title?`<h2 style="margin-top:0;">${esc(title)}</h2>`:''}${date?`<p class="ann-slide-meta">${esc(date)}</p>`:''}${body?`<p style="font-size:1.1rem;">${esc(body)}</p>`:''}</div>`);
+          }
+        }
+      });
+
+      root.addEventListener('keydown', (e)=>{
+        if ((e.key === 'Enter' || e.key === ' ') && e.target.closest('[data-zoom].text-only')) {
+          e.preventDefault();
+          e.target.click();
+        }
+      });
+
+      lightboxClose.addEventListener('click', closeLightbox);
+      lightbox.addEventListener('click', (e)=>{ if (e.target === lightbox) closeLightbox(); });
+      document.addEventListener('keydown', (e)=>{ if (e.key === 'Escape' && lightbox.classList.contains('open')) closeLightbox(); });
+
       render();
       window.addEventListener('iapi:langchange', render);
     })();

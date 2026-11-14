@@ -25,10 +25,11 @@ exports.handler = async function () {
     const items = entries.map((entry) => {
       const title = extract("title", entry);
       const published = extract("published", entry);
+      const description = extract("media:description", entry) || extract("summary", entry);
       const linkMatch = entry.match(/<link[^>]+href="([^"]+)"/i);
       const id = extract("yt:videoId", entry);
       const link = linkMatch ? decode(linkMatch[1]) : (id ? `https://www.youtube.com/watch?v=${id}` : "");
-      return { id, title, published, link };
+      return { id, title, description, published, link };
     }).filter((i) => i.title && i.link);
 
     return {
