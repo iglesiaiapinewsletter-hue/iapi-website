@@ -14,7 +14,32 @@
   <link rel="canonical" href="https://iapi-test-site.netlify.app/404.html">
 </head>
 <body>
-  <main class="section" style="min-height:100vh;display:grid;place-items:center;text-align:center;">
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="/" aria-label="IAPI Inicio">
+        <img src="/assets/images/logo.png" alt="Logo de Iglesia Apóstoles y Profetas Irving">
+        <span>IAPI Irving</span>
+      </a>
+      <nav aria-label="Principal">
+        <ul class="nav-links">
+          <li><a href="/planifica-tu-visita/" data-i18n="nav.visit">Planifica tu visita</a></li>
+          <li><a href="/nosotros/" data-i18n="nav.about">Nosotros</a></li>
+          <li><a href="/ministerios/" data-i18n="nav.ministries">Ministerios</a></li>
+          <li><a href="/ver/" data-i18n="nav.watch">Ver</a></li>
+          <li><a href="/eventos/" data-i18n="nav.events">Eventos</a></li>
+          <li><a href="/anuncios/" data-i18n="nav.announcements">Anuncios</a></li>
+          <li><a href="/dar/" data-i18n="nav.give">Dar</a></li>
+          <li><a href="/oracion/" data-i18n="nav.prayer">Oración</a></li>
+          <li><a href="/contacto/" data-i18n="nav.contact">Contacto</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <a class="btn btn-primary visit-cta" href="/planifica-tu-visita/" data-i18n="common.planVisit">Planifica tu visita</a>
+      </div>
+    </div>
+  </header>
+
+  <main style="padding-top:calc(var(--header-h) + 2rem);" class="section" style="min-height:100vh;display:grid;place-items:center;text-align:center;">
     <div class="container" style="max-width:700px;">
       <div style="display:flex;justify-content:flex-end;margin-bottom:1rem;"><button type="button" class="btn btn-secondary" id="langToggle" aria-label="Cambiar idioma / Switch language" style="padding:.45rem .8rem;">EN</button></div>
       <p class="eyebrow" data-i18n="notFound.eyebrow">404</p>
