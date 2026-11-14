@@ -205,8 +205,9 @@
             const r=await fetch('/.netlify/functions/sermons', { cache: 'no-store' });
             let d = null;
             try { d = await r.json(); } catch (_) {}
-            if(!r.ok || !d) throw new Error('bad');
+            if(!d) throw new Error('bad');
             items=(d.items||[]).map(i => ({...i, meta: parser.parseSermonTitle(i.title || '')}));
+            if ((!items.length) && d.error) throw new Error('feed');
           }
           loadRecentEmbed();
           buildFilters();
