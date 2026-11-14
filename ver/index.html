@@ -35,6 +35,7 @@
         </ul>
       </nav>
       <div class="header-actions">
+        <button type="button" class="btn btn-secondary" id="langToggle" aria-label="Cambiar idioma / Switch language" style="padding:.45rem .8rem;">EN</button>
         <a class="btn btn-primary visit-cta" href="/planifica-tu-visita/" data-i18n="common.planVisit">Planifica tu visita</a>
       </div>
     </div>
@@ -197,21 +198,24 @@
         const q=(search.value||'').toLowerCase().trim();
         const watchLink = W('watch.watchYouTubeLink','Ver en YouTube','Watch on YouTube');
         const noMsg = W('watch.noMessages','No hay mensajes para mostrar.','No messages to show.');
-        const filtered=items.filter(i=>{
+        let filtered=items.filter(i=>{
           const hay = `${i.title||''} ${i.description||''} ${i.meta?.serviceType||''} ${i.meta?.date?.label||''}`.toLowerCase();
           if (q && !hay.includes(q)) return false;
           const unmatched = !i.meta || i.meta.parsed === false;
-          if (unmatched) return !q || hay.includes(q);
+          if (activeType === 'all' && activeMonth === 'all') return true;
+          if (unmatched) return true;
           if (activeType !== 'all' && i.meta.serviceType !== activeType) return false;
           if (activeMonth !== 'all' && i.meta?.date?.monthYear !== activeMonth) return false;
           return true;
         });
+        if(!filtered.length && items.length && !q && activeType==='all' && activeMonth==='all') filtered = items;
         if(!filtered.length){list.innerHTML=`<div class="card"><p>${noMsg}</p></div>`;return;}
         list.innerHTML=filtered.map(i=>{
           const meta = i.meta || {};
           const bits = [meta.serviceType, meta.date?.label].filter(Boolean);
           const metaLine = bits.length ? bits.join(' · ') : (i.published || '');
-          return `<article class="card"><h3 style="font-size:1.3rem;">${(i.title||'Mensaje')}</h3><p style="color:var(--color-text-muted);font-size:.95rem;">${metaLine || ''}</p><p><a href="${i.link||'#'}" target="_blank" rel="noopener">${watchLink}</a></p></article>`;
+          const dateText = metaLine || (i.published ? new Date(i.published).toLocaleDateString(document.documentElement.lang==='en'?'en-US':'es-US',{year:'numeric',month:'long',day:'numeric'}) : '');
+          return `<article class="card"><h3 style="font-size:1.3rem;">${(i.title||'Mensaje')}</h3><p style="color:var(--color-text-muted);font-size:.95rem;">${dateText || ''}</p><p><a href="${i.link||'#'}" target="_blank" rel="noopener">${watchLink}</a></p></article>`;
         }).join('');
       }
 
